@@ -1,0 +1,47 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import Button from '@/components/ui/Button.astro';
+import { careerPath } from '@/data/content';
+---
+
+<section id="groeipad" class="bg-ivory-100 py-28 lg:py-40">
+  <div class="container-x grid gap-16 lg:grid-cols-[1fr_1.15fr] lg:gap-24">
+    <div class="lg:sticky lg:top-32 lg:self-start">
+      <SectionHeading eyebrow="Jouw groeipad">
+        Groeien in<br /><em>je eigen tempo</em>
+        <Fragment slot="intro">
+          Iedereen begint op dezelfde plek, zonder ervaring. Wil je verder groeien? Dan helpen we je daarbij. Het mag, het moet niet.
+        </Fragment>
+      </SectionHeading>
+      <div class="mt-10" data-reveal="up">
+        <Button href="/solliciteren" variant="navy">Kom kennismaken</Button>
+      </div>
+    </div>
+
+    <ol class="relative" data-timeline>
+      <span class="absolute top-2 bottom-2 left-[0.6rem] w-px bg-navy-800/12" aria-hidden="true">
+        <span class="block size-full origin-top bg-gold-500" data-timeline-line></span>
+      </span>
+      {careerPath.map((level, i) => (
+        <li class="level relative pb-14 pl-14 last:pb-0" data-timeline-item>
+          <span class="level__dot absolute top-2 left-0 size-5 rotate-45 border border-navy-800/25 bg-ivory-100"></span>
+          <p class="eyebrow mb-3 text-gold-600">Niveau {i + 1}</p>
+          <h3 class="mb-3 text-4xl sm:text-5xl">{level.role}</h3>
+          <p class="max-w-md text-lg leading-relaxed">{level.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .level { opacity: 0.35; transition: opacity 0.8s var(--ease-out-expo); }
+  .level:global(.is-active) { opacity: 1; }
+  .level__dot { transition: background-color 0.5s, border-color 0.5s, transform 0.6s var(--ease-out-expo); }
+  .level:global(.is-active) .level__dot {
+    background: var(--color-gold-500);
+    border-color: var(--color-gold-500);
+    transform: rotate(45deg) scale(1.15);
+  }
+  :global(html:not(.js)) .level { opacity: 1; }
+</style>

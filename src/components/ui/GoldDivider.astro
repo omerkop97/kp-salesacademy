@@ -1,0 +1,11 @@
+---
+// De gouden lijn met ruit uit het logo.
+interface Props { class?: string }
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={['flex items-center gap-3 text-gold-500', className]} data-divider aria-hidden="true">
+  <span class="h-px flex-1 origin-right bg-current" data-divider-line></span>
+  <span class="size-2 rotate-45 bg-current"></span>
+  <span class="h-px flex-1 origin-left bg-current" data-divider-line></span>
+</div>

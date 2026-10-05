@@ -1,0 +1,14 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+---
+
+<BaseLayout title="Pagina niet gevonden" noindex showMobileCta={false}>
+  <section class="grain on-dark flex min-h-svh items-center bg-navy-900 text-center text-ivory-50/75">
+    <div class="container-x">
+      <p class="font-serif text-[clamp(6rem,20vw,14rem)] leading-none text-gold-500 italic">404</p>
+      <h1 class="mb-10 text-4xl text-ivory-50">Deze pagina bestaat (nog) niet.</h1>
+      <Button href="/">Terug naar home</Button>
+    </div>
+  </section>
+</BaseLayout>

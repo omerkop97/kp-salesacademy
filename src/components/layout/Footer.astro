@@ -1,0 +1,49 @@
+---
+import Logo from '@/components/ui/Logo.astro';
+import { site, whatsappLink, locations, serviceArea } from '@/data/site';
+const wa = whatsappLink();
+const year = new Date().getFullYear();
+---
+
+<footer class="grain bg-navy-950 pt-24 pb-28 text-ivory-50/70 lg:pb-12">
+  <div class="container-x">
+    <div class="grid gap-14 border-b border-ivory-50/10 pb-16 md:grid-cols-[1.4fr_1fr_1fr]">
+      <div>
+        <Logo tone="light" size="lg" class="items-start!" />
+        <p class="mt-8 max-w-sm leading-relaxed">
+          Wij leiden ambitieuze mensen op tot topverkopers en leiders van morgen.
+        </p>
+      </div>
+
+      <div>
+        <p class="eyebrow mb-5 text-gold-300">Contact</p>
+        <ul class="space-y-3">
+          <li><a class="hover:text-ivory-50" href={`mailto:${site.email}`}>{site.email}</a></li>
+          {site.phone && <li><a class="hover:text-ivory-50" href={`tel:${site.phone.replace(/\D/g, '')}`}>{site.phone}</a></li>}
+          {wa && <li><a class="hover:text-ivory-50" href={wa} target="_blank" rel="noopener">WhatsApp ons</a></li>}
+        </ul>
+      </div>
+
+      <div>
+        <p class="eyebrow mb-5 text-gold-300">Academy</p>
+        <ul class="space-y-3">
+          <li><a class="hover:text-ivory-50" href="/#aanpak">Onze aanpak</a></li>
+          <li><a class="hover:text-ivory-50" href="/#groeipad">Groeipad</a></li>
+          <li><a class="hover:text-ivory-50" href="/#faq">Veelgestelde vragen</a></li>
+          <li><a class="hover:text-ivory-50" href="/solliciteren">Solliciteren</a></li>
+          {site.socials.instagram && <li><a class="hover:text-ivory-50" href={site.socials.instagram} target="_blank" rel="noopener">Instagram</a></li>}
+          {site.socials.tiktok && <li><a class="hover:text-ivory-50" href={site.socials.tiktok} target="_blank" rel="noopener">TikTok</a></li>}
+        </ul>
+      </div>
+    </div>
+
+    <p class="pt-8 text-sm text-ivory-50/45">
+      Werken in sales vanuit {locations[0].city}. Actief in {serviceArea.join(', ')} en omgeving.
+    </p>
+
+    <div class="flex flex-col gap-4 pt-4 text-sm sm:flex-row sm:items-center sm:justify-between">
+      <p>© {year} {site.name}. Onderdeel van {site.parent}.</p>
+      <a class="hover:text-ivory-50" href="/privacy">Privacyverklaring</a>
+    </div>
+  </div>
+</footer>

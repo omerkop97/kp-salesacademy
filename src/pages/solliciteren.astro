@@ -1,0 +1,88 @@
+---
+// Gefocuste landingspagina voor advertenties: geen afleiding, alleen het formulier.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ApplyForm from '@/components/forms/ApplyForm.astro';
+import { site, locations, serviceArea } from '@/data/site';
+
+const city = locations[0].city;
+
+// Google for Jobs: vacature verschijnt in de vacature-zoekresultaten van Google
+const jobSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'JobPosting',
+  title: 'Sales Representative (geen ervaring nodig)',
+  description: `<p>Wil jij leren verkopen, goed verdienen en doorgroeien tot leider? Bij ${site.name} in ${city} word je vanaf dag één getraind en gecoacht door ervaren leiders.</p>
+<ul><li>Geen ervaring of cv nodig</li><li>Verdienen vanaf week één, hoe meer je verkoopt hoe meer je verdient</li><li>Dagelijkse training en coaching</li><li>Jong en ambitieus team</li><li>Doorgroeien als jij dat wilt</li></ul>
+<p>Werkgebied: ${serviceArea.join(', ')} en omgeving.</p>`,
+  datePosted: '2026-10-05',
+  employmentType: ['FULL_TIME', 'PART_TIME'],
+  directApply: true,
+  hiringOrganization: { '@type': 'Organization', name: site.name, sameAs: site.url, logo: `${site.url}/og-image.jpg` },
+  jobLocation: {
+    '@type': 'Place',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: city,
+      addressRegion: 'Gelderland',
+      addressCountry: 'NL',
+      ...(locations[0].address && { streetAddress: locations[0].address }),
+      ...(locations[0].postalCode && { postalCode: locations[0].postalCode }),
+    },
+  },
+};
+---
+
+<BaseLayout
+  title={`Solliciteren: werken in sales in ${city}`}
+  description={`Solliciteer in 30 seconden bij K&P Sales Academy in ${city}. Geen ervaring of cv nodig, wij nemen binnen 48 uur contact met je op.`}
+  showMobileCta={false}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jobSchema)} />
+  <section class="grain on-dark relative min-h-svh overflow-hidden bg-navy-900 pt-32 pb-24 text-ivory-50/75 lg:pt-40">
+    <div class="glow pointer-events-none absolute inset-0 -z-10" aria-hidden="true"></div>
+    <div class="container-x grid gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-24">
+      <div>
+        <p class="eyebrow mb-6 flex items-center gap-4 text-gold-300" data-reveal="fade">
+          <span class="h-px w-10 bg-current"></span>Solliciteren
+        </p>
+        <h1 class="h-section text-ivory-50" data-split>
+          Jouw carrière<br />begint <em>hier.</em>
+        </h1>
+        <p class="mt-8 max-w-md text-lg leading-relaxed" data-reveal="up">
+          Vul je gegevens in en we bellen je binnen 48 uur voor een informeel kennismakingsgesprek. Geen cv, geen ervaring nodig.
+        </p>
+        <p class="mt-4 max-w-md text-sm text-ivory-50/45" data-reveal="fade">
+          Actief vanuit {city}. Werkgebied: {serviceArea.filter((c) => c !== city).join(', ')} en omgeving.
+        </p>
+        <ol class="mt-12 space-y-6" data-stagger>
+          {[
+            ['Laat je gegevens achter', '30 seconden, echt waar.'],
+            ['We bellen je', 'Binnen 48 uur, om kennis te maken.'],
+            ['Je start', 'Training, team en je eerste sale.'],
+          ].map(([t, d]) => (
+            <li class="flex gap-5">
+              <span class="mt-2 size-2 shrink-0 rotate-45 bg-gold-500" aria-hidden="true"></span>
+              <span>
+                <span class="block text-lg text-ivory-50">{t}</span>
+                <span class="text-sm">{d}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div class="relative self-start border border-ivory-50/12 bg-navy-950/40 p-7 backdrop-blur-sm sm:p-12" data-reveal="up">
+        <span class="absolute -top-px left-10 h-px w-24 bg-gold-500" aria-hidden="true"></span>
+        <ApplyForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .glow {
+    background:
+      radial-gradient(50% 60% at 85% 30%, rgb(201 161 59 / 0.11), transparent 70%),
+      radial-gradient(40% 50% at 0% 100%, rgb(30 58 95 / 0.6), transparent 70%);
+  }
+</style>

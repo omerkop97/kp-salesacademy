@@ -1,0 +1,74 @@
+---
+import Button from '@/components/ui/Button.astro';
+
+// Zet hier later een teamvideo neer (bijv. /video/hero.mp4) voor de achtergrond
+const video = '';
+const poster = '';
+---
+
+<section class="hero grain on-dark relative flex min-h-svh items-center overflow-hidden bg-navy-900 pt-28 pb-20" data-hero>
+  {video && (
+    <video class="absolute inset-0 -z-10 size-full object-cover opacity-35" src={video} poster={poster} autoplay muted loop playsinline></video>
+  )}
+  <div class="hero-glow pointer-events-none absolute inset-0 -z-10" aria-hidden="true"></div>
+
+  <div class="container-x relative" data-hero-content>
+    <div class="relative mx-auto max-w-6xl px-2 py-16 text-center sm:px-10 sm:py-20 lg:py-24">
+      <!-- het kader uit het logo, tekent zichzelf -->
+      <svg class="absolute inset-0 size-full overflow-visible text-gold-500/70" data-hero-frame aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 1000 600" fill="none">
+        <path d="M120 0 H0 V600 H1000 V0 H880" stroke="currentColor" stroke-width="1.2" vector-effect="non-scaling-stroke"></path>
+      </svg>
+
+      <p class="eyebrow absolute -top-2 left-1/2 -translate-x-1/2 px-5 whitespace-nowrap text-gold-300" data-hero-in>
+        K&amp;P Sales Academy · Arnhem
+      </p>
+
+      <h1 class="h-display text-ivory-50" data-hero-title>
+        Leer verkopen.<br />
+        Verdien goed.<br />
+        <em>Bouw aan jezelf.</em>
+      </h1>
+
+      <p class="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-ivory-50/75 sm:text-xl" data-hero-in>
+        Geen ervaring nodig, wel ambitie. Wij leren je alles wat je moet weten en jij bepaalt hoe snel je groeit.
+      </p>
+
+      <div class="mt-11 flex flex-col items-center justify-center gap-3 sm:flex-row" data-hero-in>
+        <Button href="/solliciteren">Solliciteer in 30 sec</Button>
+        <Button href="#aanpak" variant="ghost-light">Zo werkt het</Button>
+      </div>
+    </div>
+  </div>
+
+  <a href="#waarom" class="scroll-hint eyebrow absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col [@media(min-height:820px)]:lg:flex items-center gap-3 text-ivory-50/50" data-hero-in aria-label="Scroll naar beneden">
+    Scroll
+    <span class="scroll-hint__line"></span>
+  </a>
+</section>
+
+<style>
+  .hero-glow {
+    background:
+      radial-gradient(60% 55% at 50% 45%, rgb(201 161 59 / 0.13), transparent 70%),
+      radial-gradient(40% 40% at 85% 100%, rgb(30 58 95 / 0.7), transparent 70%),
+      radial-gradient(35% 35% at 10% 10%, rgb(30 58 95 / 0.55), transparent 70%);
+  }
+  .scroll-hint__line {
+    position: relative;
+    width: 1px;
+    height: 48px;
+    overflow: hidden;
+    background: rgb(250 248 243 / 0.15);
+  }
+  .scroll-hint__line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-gold-300);
+    animation: drip 2.2s var(--ease-out-expo) infinite;
+  }
+  @keyframes drip {
+    0% { transform: translateY(-100%); }
+    60%, 100% { transform: translateY(100%); }
+  }
+</style>

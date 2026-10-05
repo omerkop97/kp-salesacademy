@@ -1,0 +1,100 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource/cormorant-garamond/500.css';
+@import '@fontsource/cormorant-garamond/600.css';
+@import '@fontsource/cormorant-garamond/500-italic.css';
+@import '@fontsource/cormorant-garamond/600-italic.css';
+
+@theme {
+  --color-navy-950: #040e1c;
+  --color-navy-900: #06152a;
+  --color-navy-800: #0b2341;
+  --color-navy-700: #132f52;
+  --color-navy-600: #1e3a5f;
+  --color-gold-600: #b08a2c;
+  --color-gold-500: #c9a13b;
+  --color-gold-300: #e2c77a;
+  --color-ivory-50: #faf8f3;
+  --color-ivory-100: #f3efe6;
+  --color-stone-200: #e7e2d8;
+  --color-ink-700: #3a4556;
+  --color-ink-500: #6b7484;
+
+  --font-serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-sans: 'Inter Variable', system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    @apply bg-ivory-50 text-ink-700 antialiased;
+    font-family: var(--font-sans);
+    -webkit-tap-highlight-color: transparent;
+  }
+  ::selection {
+    @apply bg-gold-500 text-navy-900;
+  }
+  h1, h2, h3 {
+    @apply font-serif text-navy-800;
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+  }
+  em {
+    @apply text-gold-500;
+    font-style: italic;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-4 outline-gold-500;
+  }
+}
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12;
+  }
+  .eyebrow {
+    @apply font-sans text-[0.7rem] font-medium tracking-[0.32em] uppercase sm:text-xs;
+  }
+  .h-display {
+    @apply text-[clamp(2.75rem,7.6vw,7.5rem)];
+  }
+  .h-section {
+    @apply text-[clamp(2.4rem,5.5vw,4.75rem)];
+  }
+  .on-dark h1, .on-dark h2, .on-dark h3 { @apply text-ivory-50; }
+  .on-dark em { @apply text-gold-300; }
+
+  /* subtiele grain over donkere secties */
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+}
+
+/* Elementen die door GSAP worden onthuld: verborgen tot JS ze toont.
+   Zonder JS of met reduced motion blijft alles zichtbaar. */
+html.js [data-reveal],
+html.js [data-hero-title] { opacity: 0; }
+html.js [data-hero-in] { opacity: 0; transform: translateY(30px); }
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal],
+  html.js [data-hero-title],
+  html.js [data-hero-in] { opacity: 1 !important; transform: none !important; }
+}

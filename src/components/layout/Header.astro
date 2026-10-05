@@ -1,0 +1,163 @@
+---
+import Logo from '@/components/ui/Logo.astro';
+
+interface Props {
+  /** tone van de tekst bovenaan de pagina (voor scrollen) */
+  tone?: 'light' | 'dark';
+}
+const { tone = 'light' } = Astro.props;
+
+const nav = [
+  { href: '/#waarom', label: 'Waarom wij' },
+  { href: '/#aanpak', label: 'Aanpak' },
+  { href: '/#groeipad', label: 'Groeipad' },
+  { href: '/#faq', label: 'Vragen' },
+];
+---
+
+<header class="site-header" data-tone={tone} data-header>
+  <div class="container-x flex h-20 items-center justify-between gap-6">
+    <a href="/" class="relative z-10 shrink-0" aria-label="K&P Sales Academy, naar home">
+      <span class="logo-light"><Logo tone="light" /></span>
+      <span class="logo-dark"><Logo tone="dark" /></span>
+    </a>
+
+    <nav class="hidden items-center gap-9 lg:flex" aria-label="Hoofdmenu">
+      {nav.map((item) => (
+        <a href={item.href} class="nav-link eyebrow">{item.label}</a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href="/solliciteren" class="header-cta eyebrow hidden sm:inline-flex">Solliciteer</a>
+      <button
+        type="button"
+        class="menu-toggle relative z-10 grid size-11 place-items-center lg:hidden"
+        aria-label="Menu openen"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-menu-toggle
+      >
+        <span class="menu-icon"><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="mobile-menu grain lg:hidden" data-mobile-menu hidden>
+    <nav class="container-x flex h-full flex-col justify-center gap-2 pb-10" aria-label="Mobiel menu">
+      {nav.map((item, i) => (
+        <a href={item.href} class="mobile-link font-serif text-5xl text-ivory-50" style={`--i:${i}`}>{item.label}</a>
+      ))}
+      <a href="/solliciteren" class="mobile-link mt-8 font-serif text-5xl text-gold-300 italic" style={`--i:${nav.length}`}>Solliciteer nu</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]')!;
+  const toggle = header.querySelector<HTMLButtonElement>('[data-menu-toggle]')!;
+  const menu = header.querySelector<HTMLElement>('[data-mobile-menu]')!;
+
+  let lastY = 0;
+  const onScroll = () => {
+    const y = window.scrollY;
+    header.classList.toggle('is-scrolled', y > 40);
+    header.classList.toggle('is-hidden', y > lastY && y > 400 && !header.classList.contains('is-open'));
+    lastY = y;
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const setOpen = (open: boolean) => {
+    header.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Menu sluiten' : 'Menu openen');
+    document.documentElement.classList.toggle('lenis-stopped', open);
+    if (open) menu.hidden = false;
+    else setTimeout(() => { if (!header.classList.contains('is-open')) menu.hidden = true; }, 500);
+  };
+  toggle.addEventListener('click', () => setOpen(!header.classList.contains('is-open')));
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('menu:close', () => setOpen(false));
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    color: var(--color-ivory-50);
+    transition: transform 0.5s var(--ease-out-expo), background-color 0.4s, color 0.4s, box-shadow 0.4s;
+  }
+  .site-header[data-tone='dark'] { color: var(--color-navy-800); }
+  .site-header.is-scrolled {
+    color: var(--color-navy-800);
+    background: color-mix(in srgb, var(--color-ivory-50) 88%, transparent);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--color-navy-800) 8%, transparent);
+  }
+  .site-header.is-hidden { transform: translateY(-100%); }
+  .site-header.is-open { color: var(--color-ivory-50); background: transparent; box-shadow: none; backdrop-filter: none; }
+
+  /* juiste logo-variant tonen */
+  .logo-dark { display: none; }
+  .site-header[data-tone='dark'] .logo-light,
+  .site-header.is-scrolled .logo-light { display: none; }
+  .site-header[data-tone='dark'] .logo-dark,
+  .site-header.is-scrolled .logo-dark { display: inline; }
+  .site-header.is-open .logo-dark { display: none; }
+  .site-header.is-open .logo-light { display: inline; }
+
+  .nav-link { position: relative; padding: 0.5rem 0; }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px;
+    background: var(--color-gold-500);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s var(--ease-out-expo);
+  }
+  .nav-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+  .header-cta {
+    align-items: center;
+    padding: 0.8rem 1.3rem;
+    background: var(--color-gold-500);
+    color: var(--color-navy-900);
+    font-weight: 600;
+    transition: background-color 0.3s;
+  }
+  .header-cta:hover { background: var(--color-gold-300); }
+
+  .menu-icon { position: relative; width: 26px; height: 10px; }
+  .menu-icon span {
+    position: absolute; left: 0; right: 0; height: 1.5px; background: currentColor;
+    transition: transform 0.5s var(--ease-out-expo), top 0.3s;
+  }
+  .menu-icon span:first-child { top: 0; }
+  .menu-icon span:last-child { top: 100%; }
+  .is-open .menu-icon span:first-child { top: 50%; transform: rotate(45deg); }
+  .is-open .menu-icon span:last-child { top: 50%; transform: rotate(-45deg); }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: var(--color-navy-900);
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.7s var(--ease-out-expo);
+  }
+  .is-open .mobile-menu { clip-path: inset(0 0 0 0); }
+  .mobile-link {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s, transform 0.8s var(--ease-out-expo);
+  }
+  .is-open .mobile-link {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(0.15s + var(--i) * 0.06s);
+  }
+</style>

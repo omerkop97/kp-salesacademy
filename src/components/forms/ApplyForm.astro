@@ -1,0 +1,222 @@
+---
+import { locations } from '@/data/site';
+
+interface Props {
+  tone?: 'light' | 'dark';
+}
+const { tone = 'dark' } = Astro.props;
+const activeLocations = locations.filter((l) => l.active);
+
+const sources = ['Instagram', 'TikTok', 'Snapchat', 'Via een vriend(in)', 'Google', 'Anders'];
+---
+
+<!-- Netlify Forms: inzendingen komen binnen in Netlify en worden doorgemaild (Forms > Notifications) -->
+<form
+  class:list={['apply-form', `apply-form--${tone}`]}
+  name="sollicitatie"
+  method="POST"
+  action="/bedankt"
+  data-netlify="true"
+  netlify-honeypot="bedrijf"
+  data-apply-form
+  novalidate
+>
+  <input type="hidden" name="form-name" value="sollicitatie" />
+  <input type="hidden" name="utm_source" />
+  <input type="hidden" name="utm_medium" />
+  <input type="hidden" name="utm_campaign" />
+  <input type="hidden" name="pagina" />
+  <input type="hidden" name="referrer" />
+  <div class="grid gap-x-6 gap-y-7 sm:grid-cols-2">
+    <label class="field sm:col-span-2">
+      <span class="field__label">Naam</span>
+      <input name="naam" type="text" autocomplete="name" required maxlength="100" placeholder="Je voor- en achternaam" />
+    </label>
+    <label class="field">
+      <span class="field__label">Telefoonnummer</span>
+      <input name="telefoon" type="tel" autocomplete="tel" required maxlength="20" placeholder="06 12345678" />
+    </label>
+    <label class="field">
+      <span class="field__label">E-mailadres</span>
+      <input name="email" type="email" autocomplete="email" required maxlength="150" placeholder="jij@email.nl" />
+    </label>
+    <label class="field sm:col-span-2">
+      <span class="field__label">Hoe ken je ons?</span>
+      <select name="hoe_ken_je_ons" required>
+        <option value="" disabled selected>Kies een optie</option>
+        {sources.map((s) => <option value={s}>{s}</option>)}
+      </select>
+    </label>
+    {activeLocations.length > 1 && (
+      <label class="field sm:col-span-2">
+        <span class="field__label">Voorkeur vestiging</span>
+        <select name="vestiging">
+          {activeLocations.map((l) => <option value={l.slug}>{l.city}</option>)}
+        </select>
+      </label>
+    )}
+    {activeLocations.length === 1 && <input type="hidden" name="vestiging" value={activeLocations[0].slug} />}
+
+    <!-- honeypot tegen spam-bots -->
+    <label class="hidden" aria-hidden="true">Laat leeg <input name="bedrijf" tabindex="-1" autocomplete="off" /></label>
+
+    <label class="consent sm:col-span-2">
+      <input type="checkbox" name="toestemming" value="ja" required />
+      <span>
+        Ik ga akkoord dat K&amp;P Sales Academy mijn gegevens gebruikt om contact met mij op te nemen over mijn sollicitatie.
+        <a href="/privacy" target="_blank" class="underline underline-offset-2">Privacyverklaring</a>
+      </span>
+    </label>
+  </div>
+
+  <p class="form-error mt-6 hidden text-sm" role="alert" data-form-error></p>
+
+  <button type="submit" class="submit mt-8 flex w-full items-center justify-center gap-3" data-submit>
+    <span data-submit-label>Verstuur mijn gegevens</span>
+    <svg viewBox="0 0 20 20" fill="none" class="size-5" aria-hidden="true"><path d="M4 10h12m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <p class="form-note mt-4 text-center text-sm">We nemen binnen 48 uur contact met je op.</p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-apply-form]').forEach((form) => {
+    const errorEl = form.querySelector<HTMLElement>('[data-form-error]')!;
+    const button = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const label = form.querySelector<HTMLElement>('[data-submit-label]')!;
+
+    const showError = (msg: string) => {
+      errorEl.textContent = msg;
+      errorEl.classList.remove('hidden');
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.classList.add('hidden');
+
+      if (!form.checkValidity()) {
+        form.classList.add('was-validated');
+        const firstInvalid = form.querySelector<HTMLElement>(':invalid');
+        firstInvalid?.focus();
+        showError('Vul alle velden in en geef toestemming om contact met je op te nemen.');
+        return;
+      }
+
+      // herkomst meesturen, zodat je ziet welke advertentie werkt
+      const params = new URLSearchParams(location.search);
+      const setHidden = (name: string, value: string | null) => {
+        const input = form.elements.namedItem(name) as HTMLInputElement | null;
+        if (input) input.value = value ?? '';
+      };
+      ['utm_source', 'utm_medium', 'utm_campaign'].forEach((key) => setHidden(key, params.get(key)));
+      setHidden('pagina', location.pathname);
+      setHidden('referrer', document.referrer);
+
+      const formData = new FormData(form);
+      const first = String(formData.get('naam')).trim().split(' ')[0];
+
+      button.disabled = true;
+      label.textContent = 'Bezig met versturen…';
+      try {
+        if (import.meta.env.DEV) {
+          // lokaal is er geen Netlify: alleen loggen
+          console.log('[sollicitatie] (dev)', Object.fromEntries(formData));
+        } else {
+          const res = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData as unknown as Record<string, string>).toString(),
+          });
+          if (!res.ok) throw new Error('Er ging iets mis.');
+        }
+        location.href = `/bedankt?naam=${encodeURIComponent(first)}`;
+      } catch (err) {
+        showError(`${(err as Error).message} Probeer het opnieuw of stuur ons een WhatsApp.`);
+        button.disabled = false;
+        label.textContent = 'Verstuur mijn gegevens';
+      }
+    });
+  });
+</script>
+
+<style>
+  .apply-form {
+    --fg: var(--color-ivory-50);
+    --muted: rgb(250 248 243 / 0.55);
+    --line: rgb(250 248 243 / 0.25);
+    color: var(--fg);
+  }
+  .apply-form--light {
+    --fg: var(--color-navy-800);
+    --muted: var(--color-ink-500);
+    --line: rgb(11 35 65 / 0.2);
+  }
+  .field { display: flex; flex-direction: column; gap: 0.6rem; }
+  .field__label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-gold-300);
+  }
+  .apply-form--light .field__label { color: var(--color-gold-600); }
+  .field input,
+  .field select {
+    width: 100%;
+    padding: 0.7rem 0;
+    font-size: 1.15rem;
+    color: var(--fg);
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    outline: none;
+    transition: border-color 0.3s;
+    appearance: none;
+  }
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23c9a13b' stroke-width='1.6'%3E%3Cpath d='m5 8 5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 1.2rem;
+  }
+  .field select option { color: var(--color-navy-900); }
+  .field input::placeholder { color: var(--muted); }
+  .field input:focus,
+  .field select:focus { border-color: var(--color-gold-500); }
+  .was-validated .field :invalid { border-color: #e2725b; }
+
+  .consent {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .consent input {
+    flex-shrink: 0;
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.1rem;
+    accent-color: var(--color-gold-500);
+  }
+  .was-validated .consent input:invalid { outline: 1px solid #e2725b; outline-offset: 2px; }
+
+  .form-error { color: #f0a08f; }
+  .apply-form--light .form-error { color: #b4442d; }
+  .form-note { color: var(--muted); }
+
+  .submit {
+    min-height: 3.75rem;
+    background: var(--color-gold-500);
+    color: var(--color-navy-900);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: background-color 0.3s, opacity 0.3s;
+  }
+  .submit:hover { background: var(--color-gold-300); }
+  .submit:disabled { opacity: 0.6; cursor: wait; }
+</style>

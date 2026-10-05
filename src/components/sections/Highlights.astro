@@ -1,0 +1,16 @@
+---
+import { highlights } from '@/data/content';
+// twee keer dezelfde reeks zodat de marquee naadloos loopt
+const items = [...highlights, ...highlights];
+---
+
+<section class="overflow-hidden border-y border-gold-500/25 bg-navy-800 py-6" data-marquee aria-label="Waarom K&P Sales Academy">
+  <ul class="flex w-max" data-marquee-track>
+    {items.map((item, i) => (
+      <li class="flex items-center gap-10 pr-10 font-serif text-2xl whitespace-nowrap text-ivory-50 italic sm:text-3xl" aria-hidden={i >= highlights.length ? 'true' : undefined}>
+        {item}
+        <span class="size-2 rotate-45 bg-gold-500"></span>
+      </li>
+    ))}
+  </ul>
+</section>

@@ -1,0 +1,48 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { steps } from '@/data/content';
+---
+
+<section id="aanpak" class="grain on-dark overflow-hidden bg-navy-900 py-28 text-ivory-50/75 lg:py-40">
+  <div class="container-x">
+    <SectionHeading eyebrow="Onze aanpak" align="center">
+      In 3 stappen naar<br /><em>je eerste sale</em>
+    </SectionHeading>
+
+    <ol class="relative mt-20 grid gap-14 lg:mt-28 lg:grid-cols-3 lg:gap-10" data-timeline>
+      <!-- de gouden lijn: verticaal op mobiel, horizontaal op desktop -->
+      <span class="absolute top-0 bottom-0 left-[1.4rem] w-px bg-ivory-50/10 lg:top-[1.4rem] lg:right-0 lg:bottom-auto lg:left-0 lg:h-px lg:w-full" aria-hidden="true">
+        <span class="timeline-line block size-full bg-gold-500" data-timeline-line></span>
+      </span>
+
+      {steps.map((step) => (
+        <li class="step relative pl-16 lg:pt-16 lg:pl-0" data-timeline-item>
+          <span class="step__dot absolute top-0 left-0 grid size-11 place-items-center border border-ivory-50/20 bg-navy-900 text-ivory-50" aria-hidden="true">
+            <span class="size-2 rotate-45 bg-current"></span>
+          </span>
+          <h3 class="mb-4 text-4xl lg:text-5xl">{step.title}</h3>
+          <p class="max-w-sm text-lg leading-relaxed">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .timeline-line { transform-origin: top left; }
+  @media (max-width: 1023px) {
+    .timeline-line { transform: scaleY(0); }
+  }
+  @media (min-width: 1024px) {
+    .timeline-line { transform: scaleX(0); }
+  }
+  .step { opacity: 0.4; transition: opacity 0.8s var(--ease-out-expo); }
+  .step__dot { transition: background-color 0.5s, border-color 0.5s, color 0.5s; }
+  .step:global(.is-active) { opacity: 1; }
+  .step:global(.is-active) .step__dot {
+    background: var(--color-gold-500);
+    border-color: var(--color-gold-500);
+    color: var(--color-navy-900);
+  }
+  :global(html:not(.js)) .step { opacity: 1; }
+</style>

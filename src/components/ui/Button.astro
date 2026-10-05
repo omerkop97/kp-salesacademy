@@ -1,0 +1,69 @@
+---
+interface Props {
+  href: string;
+  variant?: 'gold' | 'navy' | 'ghost-light' | 'ghost-dark';
+  class?: string;
+  target?: string;
+}
+const { href, variant = 'gold', class: className = '', target } = Astro.props;
+const external = target === '_blank';
+---
+
+<a
+  href={href}
+  target={target}
+  rel={external ? 'noopener' : undefined}
+  class:list={['btn', `btn--${variant}`, className]}
+>
+  <span class="btn__label"><slot /></span>
+  <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M4 10h12m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+  </svg>
+</a>
+
+<style>
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 3.25rem;
+    padding: 0.9rem 1.6rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    overflow: hidden;
+    isolation: isolate;
+    transition: color 0.4s var(--ease-out-expo), border-color 0.4s;
+  }
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.55s var(--ease-out-expo);
+  }
+  .btn:hover::before { transform: scaleX(1); transform-origin: left; }
+  .btn__arrow { width: 1.1rem; height: 1.1rem; transition: transform 0.4s var(--ease-out-expo); }
+  .btn:hover .btn__arrow { transform: translateX(4px); }
+
+  .btn--gold { background: var(--color-gold-500); color: var(--color-navy-900); }
+  .btn--gold::before { background: var(--color-ivory-50); }
+
+  .btn--navy { background: var(--color-navy-800); color: var(--color-ivory-50); }
+  .btn--navy::before { background: var(--color-gold-500); }
+  .btn--navy:hover { color: var(--color-navy-900); }
+
+  .btn--ghost-light { color: var(--color-ivory-50); border-color: color-mix(in srgb, var(--color-ivory-50) 35%, transparent); }
+  .btn--ghost-light::before { background: var(--color-ivory-50); }
+  .btn--ghost-light:hover { color: var(--color-navy-900); border-color: var(--color-ivory-50); }
+
+  .btn--ghost-dark { color: var(--color-navy-800); border-color: color-mix(in srgb, var(--color-navy-800) 30%, transparent); }
+  .btn--ghost-dark::before { background: var(--color-navy-800); }
+  .btn--ghost-dark:hover { color: var(--color-ivory-50); border-color: var(--color-navy-800); }
+</style>

@@ -1,0 +1,69 @@
+---
+import '@/styles/global.css';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import MobileCta from '@/components/layout/MobileCta.astro';
+import { site } from '@/data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  headerTone?: 'light' | 'dark';
+  showMobileCta?: boolean;
+}
+
+const {
+  title,
+  description = site.description,
+  noindex = false,
+  headerTone = 'light',
+  showMobileCta = true,
+} = Astro.props;
+
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Werken in sales, leren en doorgroeien`;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL('/og-image.jpg', site.url).href;
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#06152a" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="nl_NL" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <slot name="head" />
+  </head>
+  <body class="min-h-dvh overflow-x-clip">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-gold-500 focus:px-4 focus:py-2 focus:text-navy-900">
+      Direct naar inhoud
+    </a>
+    <Header tone={headerTone} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    {showMobileCta && <MobileCta />}
+
+    <script>
+      import { initAnimations } from '@/lib/animations';
+      initAnimations();
+    </script>
+  </body>
+</html>

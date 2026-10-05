@@ -1,0 +1,46 @@
+﻿---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import GoldDivider from '@/components/ui/GoldDivider.astro';
+import { site } from '@/data/site';
+---
+
+<BaseLayout title="Bedankt" noindex showMobileCta={false}>
+  <section class="grain on-dark flex min-h-svh items-center bg-navy-900 py-32 text-center text-ivory-50/75">
+    <div class="container-x max-w-3xl">
+      <p class="eyebrow mb-6 text-gold-300" data-reveal="fade">Sollicitatie ontvangen</p>
+      <h1 class="h-section text-ivory-50" data-split>
+        Top<span data-name></span>, <em>je bent er bijna!</em>
+      </h1>
+      <p class="mx-auto mt-8 max-w-lg text-lg leading-relaxed" data-reveal="up">
+        We hebben je gegevens ontvangen en nemen binnen 48 uur contact met je op. Houd je telefoon in de gaten!
+      </p>
+      <GoldDivider class="mx-auto my-12 max-w-xs" />
+      <div class="flex flex-col items-center justify-center gap-3 sm:flex-row" data-reveal="up">
+        {site.whatsapp && (
+          <a
+            href={`https://wa.me/${site.whatsapp}`}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex min-h-13 items-center gap-3 bg-[#25D366] px-6 text-xs font-semibold tracking-[0.18em] text-navy-900 uppercase"
+            data-wa
+          >
+            Stuur ons alvast een WhatsApp
+          </a>
+        )}
+        <Button href="/" variant="ghost-light">Terug naar home</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const name = new URLSearchParams(location.search).get('naam')?.slice(0, 40);
+  const slot = document.querySelector('[data-name]');
+  if (name && slot) slot.textContent = ` ${name}`;
+  const wa = document.querySelector<HTMLAnchorElement>('[data-wa]');
+  if (wa) {
+    const msg = `Hoi! Ik ben ${name ?? ''} en ik heb net gesolliciteerd via de website. Ik heb er zin in!`.replace('  ', ' ');
+    wa.href += `?text=${encodeURIComponent(msg)}`;
+  }
+</script>

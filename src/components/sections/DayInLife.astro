@@ -1,0 +1,31 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { dayInLife } from '@/data/content';
+---
+
+<section class="bg-ivory-50 py-28 lg:py-40">
+  <div class="container-x">
+    <SectionHeading eyebrow="Een dag bij de Academy">
+      Samen leren,<br /><em>veel lachen</em>
+      <Fragment slot="intro">
+        Geen dag is hetzelfde, maar zo ziet een gemiddelde werkdag eruit.
+      </Fragment>
+    </SectionHeading>
+
+    <ul class="mt-16 grid border-t border-navy-800/15 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
+      {dayInLife.map((moment) => (
+        <li class="moment group relative border-b border-navy-800/15 py-10 sm:pr-8 lg:border-b-0 lg:border-r lg:px-8 lg:first:pl-0 lg:last:border-r-0">
+          <span class="moment__bar absolute top-0 left-0 h-0.5 w-full origin-left scale-x-0 bg-gold-500 lg:left-8 lg:w-[calc(100%-4rem)] lg:group-first:left-0 lg:group-first:w-[calc(100%-2rem)]"></span>
+          <span class="mb-6 block size-2.5 rotate-45 bg-gold-500" aria-hidden="true"></span>
+          <h3 class="mb-3 text-3xl">{moment.title}</h3>
+          <p class="leading-relaxed">{moment.text}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .moment__bar { transition: transform 0.7s var(--ease-out-expo); }
+  .moment:hover .moment__bar { transform: scaleX(1); }
+</style>

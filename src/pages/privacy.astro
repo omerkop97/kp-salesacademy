@@ -1,0 +1,44 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/data/site';
+// TODO: laten controleren; vul bedrijfsgegevens (KvK, adres) aan zodra bekend.
+---
+
+<BaseLayout title="Privacyverklaring" headerTone="dark" showMobileCta={false}>
+  <article class="container-x max-w-3xl pt-40 pb-28">
+    <p class="eyebrow mb-6 text-gold-600">Laatst bijgewerkt: oktober 2026</p>
+    <h1 class="h-section mb-12">Privacyverklaring</h1>
+
+    <div class="prose-kp space-y-8 text-lg leading-relaxed">
+      <section>
+        <h2>Wie zijn wij?</h2>
+        <p>{site.name} is onderdeel van {site.parent}. Wij zijn verantwoordelijk voor de verwerking van de persoonsgegevens die je via deze website met ons deelt. Vragen? Mail naar <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      </section>
+      <section>
+        <h2>Welke gegevens verwerken wij?</h2>
+        <p>Als je solliciteert via het formulier verwerken wij je naam, telefoonnummer, e-mailadres, hoe je ons hebt gevonden en technische gegevens zoals de pagina waarvandaan je solliciteerde.</p>
+      </section>
+      <section>
+        <h2>Waarom?</h2>
+        <p>Alleen om contact met je op te nemen over je sollicitatie en om te meten via welke kanalen mensen ons vinden. De grondslag is jouw toestemming, die je altijd kunt intrekken.</p>
+      </section>
+      <section>
+        <h2>Hoe lang bewaren we je gegevens?</h2>
+        <p>Tot uiterlijk 4 weken na afloop van de sollicitatieprocedure. Met jouw toestemming bewaren we ze maximaal 1 jaar, voor het geval er later een passende plek vrijkomt.</p>
+      </section>
+      <section>
+        <h2>Met wie delen we je gegevens?</h2>
+        <p>We verkopen je gegevens nooit. We gebruiken een dienstverlener voor de hosting van de website en het ontvangen van het sollicitatieformulier (Netlify). Met Netlify zijn afspraken gemaakt over de beveiliging van je gegevens.</p>
+      </section>
+      <section>
+        <h2>Jouw rechten</h2>
+        <p>Je hebt het recht om je gegevens in te zien, te laten corrigeren of te laten verwijderen. Stuur daarvoor een mail naar <a href={`mailto:${site.email}`}>{site.email}</a>. Ben je niet tevreden over hoe wij met je gegevens omgaan? Dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens.</p>
+      </section>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose-kp h2 { font-size: 2rem; margin-bottom: 0.75rem; }
+  .prose-kp a { color: var(--color-navy-800); text-decoration: underline; text-decoration-color: var(--color-gold-500); text-underline-offset: 4px; }
+</style>

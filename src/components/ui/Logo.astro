@@ -1,0 +1,83 @@
+---
+// Logo opgebouwd in HTML/CSS (scherp op elk formaat, werkt op licht én donker).
+interface Props {
+  tone?: 'dark' | 'light';
+  size?: 'sm' | 'lg';
+  tagline?: boolean;
+  class?: string;
+}
+const { tone = 'dark', size = 'sm', tagline = true, class: className = '' } = Astro.props;
+---
+
+<span class:list={['logo', `logo--${tone}`, `logo--${size}`, className]} aria-label="K&P Sales Academy">
+  <span class="logo__mark" aria-hidden="true">
+    <span class="logo__frame"></span>
+    <span class="logo__letters">K<span class="logo__amp">&amp;</span>P</span>
+  </span>
+  {tagline && <span class="logo__tagline" aria-hidden="true">Sales Academy</span>}
+</span>
+
+<style>
+  .logo {
+    --ink: var(--color-navy-800);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9em;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .logo--light { --ink: var(--color-ivory-50); }
+  .logo--lg { flex-direction: column; gap: 0.5em; font-size: clamp(1rem, 2.4vw, 1.6rem); }
+  .logo--sm { font-size: 1rem; }
+
+  .logo__mark {
+    position: relative;
+    display: inline-block;
+    padding: 0 0.55em 0.1em;
+  }
+  .logo__letters {
+    position: relative;
+    display: block;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 2.1em;
+    letter-spacing: -0.04em;
+    transform: translateY(-0.12em);
+  }
+  .logo--lg .logo__letters { font-size: 4.4em; }
+  .logo__amp {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--color-gold-500);
+    margin: 0 -0.12em;
+    position: relative;
+    z-index: 1;
+  }
+  .logo__frame {
+    position: absolute;
+    inset: 0.55em 0 0;
+    border: 1.5px solid var(--ink);
+    border-top: 0;
+  }
+  /* bovenrand alleen in de hoeken, letters breken er doorheen */
+  .logo__frame::before,
+  .logo__frame::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 0.4em;
+    border-top: 1.5px solid var(--ink);
+  }
+  .logo__frame::before { left: 0; }
+  .logo__frame::after { right: 0; }
+
+  .logo__tagline {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 0.78em;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .logo--lg .logo__tagline { font-size: 1.15em; letter-spacing: 0.42em; }
+</style>

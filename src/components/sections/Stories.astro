@@ -1,0 +1,66 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { testimonials as items } from '@/data/content';
+---
+
+{items.length > 0 && (
+  <section class="grain on-dark overflow-hidden bg-navy-800 py-28 lg:py-40">
+    <div class="container-x">
+      <div class="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHeading eyebrow="Stories from the Academy">
+          Iedereen begint<br /><em>ergens</em>
+        </SectionHeading>
+        <div class="flex gap-3" data-reveal="fade">
+          <button type="button" class="story-nav" data-story-prev aria-label="Vorige verhaal">
+            <svg viewBox="0 0 20 20" fill="none" class="size-5 rotate-180"><path d="M4 10h12m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" class="story-nav" data-story-next aria-label="Volgende verhaal">
+            <svg viewBox="0 0 20 20" fill="none" class="size-5"><path d="M4 10h12m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stories-track mt-16 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 lg:mt-20" data-stories data-reveal="up">
+      {items.map((story) => (
+        <figure class="story relative flex w-[85vw] max-w-xl shrink-0 snap-start flex-col justify-between border border-ivory-50/12 bg-navy-900/60 p-8 sm:p-12">
+          <span class="font-serif text-8xl leading-none text-gold-500" aria-hidden="true">“</span>
+          <blockquote class="mt-2 font-serif text-3xl leading-tight text-ivory-50 sm:text-4xl">
+            {story.quote}
+          </blockquote>
+          <figcaption class="eyebrow mt-10 border-t border-ivory-50/12 pt-6 text-gold-300">
+            {story.role}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+)}
+
+<script>
+  const track = document.querySelector<HTMLElement>('[data-stories]');
+  if (track) {
+    const step = () => (track.querySelector<HTMLElement>('.story')?.offsetWidth ?? 400) + 20;
+    document.querySelector('[data-story-prev]')?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    document.querySelector('[data-story-next]')?.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+  }
+</script>
+
+<style>
+  .stories-track {
+    scrollbar-width: none;
+    padding-inline: max(1.25rem, calc((100vw - 80rem) / 2 + 3rem));
+    scroll-padding-inline: max(1.25rem, calc((100vw - 80rem) / 2 + 3rem));
+  }
+  .stories-track::-webkit-scrollbar { display: none; }
+  .story-nav {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 1px solid rgb(250 248 243 / 0.25);
+    color: var(--color-ivory-50);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+  .story-nav:hover { background: var(--color-gold-500); border-color: var(--color-gold-500); color: var(--color-navy-900); }
+</style>

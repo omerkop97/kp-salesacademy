@@ -1,0 +1,45 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/sections/Hero.astro';
+import Highlights from '@/components/sections/Highlights.astro';
+import Pillars from '@/components/sections/Pillars.astro';
+import Steps from '@/components/sections/Steps.astro';
+import CareerPath from '@/components/sections/CareerPath.astro';
+import DayInLife from '@/components/sections/DayInLife.astro';
+import Stories from '@/components/sections/Stories.astro';
+import Faq from '@/components/sections/Faq.astro';
+import ApplySection from '@/components/sections/ApplySection.astro';
+import { site, locations, serviceArea } from '@/data/site';
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  url: site.url,
+  logo: `${site.url}/og-image.jpg`,
+  email: site.email,
+  telephone: `+${site.whatsapp}`,
+  parentOrganization: { '@type': 'Organization', name: site.parent },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: locations[0].city,
+    addressCountry: 'NL',
+    ...(locations[0].address && { streetAddress: locations[0].address }),
+    ...(locations[0].postalCode && { postalCode: locations[0].postalCode }),
+  },
+  areaServed: serviceArea.map((name) => ({ '@type': 'City', name })),
+};
+---
+
+<BaseLayout title="Werken in sales in Arnhem en omgeving">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+  <Hero />
+  <Highlights />
+  <Pillars />
+  <Steps />
+  <CareerPath />
+  <DayInLife />
+  <Stories />
+  <Faq />
+  <ApplySection />
+</BaseLayout>

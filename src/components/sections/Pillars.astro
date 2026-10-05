@@ -1,0 +1,41 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { pillars } from '@/data/content';
+---
+
+<section id="waarom" class="bg-ivory-50 py-24 lg:py-0" data-pillars>
+  <div class="container-x grid gap-14 lg:min-h-svh lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-20">
+    <div class="relative">
+      <SectionHeading eyebrow="Waarom de Academy">
+        Verdien goed<br /><em>terwijl je bouwt</em><br />aan jezelf
+      </SectionHeading>
+      <p class="mt-8 max-w-md text-lg leading-relaxed" data-reveal="up">
+        Bij K&amp;P Sales Academy bepaal jij met je inzet hoe snel je vooruitgaat. Je leert een vak waar je de rest van je leven iets aan hebt.
+      </p>
+      <div class="absolute top-0 -left-6 hidden h-full w-px bg-stone-200 lg:block xl:-left-10" aria-hidden="true">
+        <span class="block h-full w-full origin-top bg-gold-500" data-pillars-progress></span>
+      </div>
+    </div>
+
+    <div class="pillars-stack relative grid gap-5">
+      {pillars.map((pillar) => (
+        <article class="pillar border border-stone-200 bg-white p-8 sm:p-11" data-pillar>
+          <span class="mb-10 block size-2.5 rotate-45 bg-gold-500" aria-hidden="true"></span>
+          <h3 class="mb-4 text-4xl sm:text-5xl">{pillar.title}</h3>
+          <p class="max-w-md text-lg leading-relaxed">{pillar.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (min-width: 1024px) {
+    .pillars-stack { grid-template-areas: 'stack'; }
+    .pillar {
+      grid-area: stack;
+      transform-origin: top center;
+      box-shadow: 0 30px 60px -30px rgb(6 21 42 / 0.25);
+    }
+  }
+</style>
