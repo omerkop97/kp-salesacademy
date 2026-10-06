@@ -16,6 +16,25 @@ export const pillars = [
   },
 ];
 
+export const honestSales = [
+  {
+    title: 'Geen druk, wel een goed gesprek',
+    text: 'Je luistert eerst en adviseert daarna.',
+  },
+  {
+    title: 'Een nee is ook een antwoord',
+    text: 'Niemand wordt overgehaald tegen zijn zin.',
+  },
+  {
+    title: 'Duidelijk over wat het kost',
+    text: 'Geen kleine lettertjes, geen verrassingen.',
+  },
+  {
+    title: 'Tevreden klanten boven snelle deals',
+    text: 'Daar bouw je echt iets mee op.',
+  },
+];
+
 export const steps = [
   {
     title: 'Kennismaken',
@@ -55,6 +74,7 @@ export const dayInLife = [
 
 export const highlights = [
   'Geen ervaring nodig',
+  'Eerlijk verkopen',
   'Verdienen vanaf week één',
   'Dagelijkse coaching',
   'Jong & ambitieus team',
@@ -91,6 +111,10 @@ export const faq = [
     a: 'Je spreekt namens sterke merken klanten aan, op straat of aan de deur, en helpt ze aan een product of dienst die bij ze past. Je doet dit samen met je team en altijd met begeleiding in het begin.',
   },
   {
+    q: 'Moet ik mensen dingen aansmeren?',
+    a: 'Nee, juist niet. We leren je eerlijk verkopen: goed luisteren, duidelijk uitleggen en een nee accepteren. Van klanten die écht blij zijn word jij beter, en zij ook.',
+  },
+  {
     q: 'Hoeveel kan ik verdienen?',
     a: 'Je inkomen bepaal je voor een groot deel zelf. Je verdient per verkoop, dus hoe beter je wordt, hoe meer je verdient. In het kennismakingsgesprek leggen we de beloning precies en eerlijk uit.',
   },
@@ -104,6 +128,6 @@ export const faq = [
   },
   {
     q: 'Hoe verloopt het solliciteren?',
-    a: 'Laat je gegevens achter of stuur ons een WhatsApp. We nemen binnen 48 uur contact op voor een kort, informeel kennismakingsgesprek.',
+    a: 'Laat je gegevens achter of stuur ons een WhatsApp. We nemen binnen 24 uur contact op voor een kort, informeel kennismakingsgesprek.',
   },
 ];

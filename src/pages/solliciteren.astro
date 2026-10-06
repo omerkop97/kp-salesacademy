@@ -34,7 +34,7 @@ const jobSchema = {
 
 <BaseLayout
   title={`Solliciteren: werken in sales in ${city}`}
-  description={`Solliciteer in 30 seconden bij K&P Sales Academy in ${city}. Geen ervaring of cv nodig, wij nemen binnen 48 uur contact met je op.`}
+  description={`Solliciteer in 30 seconden bij K&P Sales Academy in ${city}. Geen ervaring of cv nodig, wij nemen binnen 24 uur contact met je op.`}
   showMobileCta={false}
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jobSchema)} />
@@ -49,7 +49,7 @@ const jobSchema = {
           Jouw carrière<br />begint <em>hier.</em>
         </h1>
         <p class="mt-8 max-w-md text-lg leading-relaxed" data-reveal="up">
-          Vul je gegevens in en we bellen je binnen 48 uur voor een informeel kennismakingsgesprek. Geen cv, geen ervaring nodig.
+          Vul je gegevens in en we bellen je binnen 24 uur voor een informeel kennismakingsgesprek. Geen cv, geen ervaring nodig.
         </p>
         <p class="mt-4 max-w-md text-sm text-ivory-50/45" data-reveal="fade">
           Actief vanuit {city}. Werkgebied: {serviceArea.filter((c) => c !== city).join(', ')} en omgeving.
@@ -57,7 +57,7 @@ const jobSchema = {
         <ol class="mt-12 space-y-6" data-stagger>
           {[
             ['Laat je gegevens achter', '30 seconden, echt waar.'],
-            ['We bellen je', 'Binnen 48 uur, om kennis te maken.'],
+            ['We bellen je', 'Binnen 24 uur, om kennis te maken.'],
             ['Je start', 'Training, team en je eerste sale.'],
           ].map(([t, d]) => (
             <li class="flex gap-5">

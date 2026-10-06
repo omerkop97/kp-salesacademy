@@ -1,0 +1,40 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { honestSales } from '@/data/content';
+---
+
+<section id="eerlijk" class="bg-ivory-100 py-28 lg:py-40">
+  <div class="container-x">
+    <div class="relative grid gap-14 border border-navy-800/15 px-6 py-14 sm:px-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20 lg:px-16 lg:py-20">
+      <!-- gouden hoekjes, zoals het kader in het logo -->
+      <span class="absolute -top-px -left-px h-px w-16 bg-gold-500" aria-hidden="true"></span>
+      <span class="absolute -top-px -left-px h-16 w-px bg-gold-500" aria-hidden="true"></span>
+      <span class="absolute -right-px -bottom-px h-px w-16 bg-gold-500" aria-hidden="true"></span>
+      <span class="absolute -right-px -bottom-px h-16 w-px bg-gold-500" aria-hidden="true"></span>
+
+      <div>
+        <SectionHeading eyebrow="Waar wij voor staan">
+          Eerlijk verkopen.<br /><em>Altijd.</em>
+          <Fragment slot="intro">
+            Wij geloven dat je pas echt goed bent als de klant er ook blij van wordt. Daarom leren we je verkopen zonder trucjes.
+          </Fragment>
+        </SectionHeading>
+        <p class="mt-10 max-w-md border-l-2 border-gold-500 pl-5 font-serif text-2xl leading-snug text-navy-800 italic" data-reveal="up">
+          En die eerlijkheid geldt ook voor jou: we zijn open over wat het werk inhoudt en wat je verdient.
+        </p>
+      </div>
+
+      <ul class="self-center border-t border-navy-800/15" data-stagger>
+        {honestSales.map((item) => (
+          <li class="flex gap-5 border-b border-navy-800/15 py-7">
+            <span class="mt-3 size-2 shrink-0 rotate-45 bg-gold-500" aria-hidden="true"></span>
+            <div>
+              <h3 class="mb-1 text-3xl">{item.title}</h3>
+              <p class="text-lg leading-relaxed">{item.text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

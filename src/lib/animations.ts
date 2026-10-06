@@ -30,13 +30,20 @@ function initLenis() {
 /** Koppen regel voor regel "omhoog" laten komen, zoals op sales-club.nl */
 function splitHeadings() {
   document.querySelectorAll<HTMLElement>('[data-split]').forEach((el) => {
-    const split = SplitText.create(el, { type: 'lines', mask: 'lines', linesClass: 'split-line' });
-    gsap.from(split.lines, {
-      yPercent: 110,
-      duration: 1.1,
-      stagger: 0.09,
-      ease: 'expo.out',
-      scrollTrigger: { trigger: el, start: 'top 85%' },
+    // autoSplit: opnieuw splitsen als de breedte verandert (draaien telefoon, resize)
+    SplitText.create(el, {
+      type: 'lines',
+      mask: 'lines',
+      linesClass: 'split-line',
+      autoSplit: true,
+      onSplit: (self) =>
+        gsap.from(self.lines, {
+          yPercent: 110,
+          duration: 1.1,
+          stagger: 0.09,
+          ease: 'expo.out',
+          scrollTrigger: { trigger: el, start: 'top 85%' },
+        }),
     });
   });
 }
@@ -96,9 +103,19 @@ function hero() {
   });
 
   if (title) {
-    const split = SplitText.create(title, { type: 'lines', mask: 'lines' });
+    let first = true;
+    SplitText.create(title, {
+      type: 'lines',
+      mask: 'lines',
+      autoSplit: true,
+      onSplit: (self) => {
+        // alleen bij het laden animeren; bij een resize gewoon opnieuw splitsen
+        if (!first) return;
+        first = false;
+        tl.from(self.lines, { yPercent: 115, duration: 1.3, stagger: 0.12 }, 0.2);
+      },
+    });
     gsap.set(title, { opacity: 1 });
-    tl.from(split.lines, { yPercent: 115, duration: 1.3, stagger: 0.12 }, 0.2);
   }
   tl.to(root.querySelectorAll('[data-hero-in]'), { opacity: 1, y: 0, duration: 1.1, stagger: 0.1 }, 0.7);
 
