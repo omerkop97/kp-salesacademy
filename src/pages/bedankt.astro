@@ -8,12 +8,12 @@ import { site } from '@/data/site';
 <BaseLayout title="Bedankt" noindex showMobileCta={false}>
   <section class="grain on-dark flex min-h-svh items-center bg-navy-900 py-32 text-center text-ivory-50/75">
     <div class="container-x max-w-3xl">
-      <p class="eyebrow mb-6 text-gold-300" data-reveal="fade">Sollicitatie ontvangen</p>
+      <p class="eyebrow mb-6 text-gold-300" data-reveal="fade" data-thanks-eyebrow>Aanmelding ontvangen</p>
       <h1 class="h-section text-ivory-50" data-split>
         Top<span data-name></span>, <em>je bent er bijna!</em>
       </h1>
-      <p class="mx-auto mt-8 max-w-lg text-lg leading-relaxed" data-reveal="up">
-        We hebben je gegevens ontvangen en nemen binnen 24 uur contact met je op. Houd je telefoon in de gaten!
+      <p class="mx-auto mt-8 max-w-lg text-lg leading-relaxed" data-reveal="up" data-thanks-text>
+        We hebben je gegevens ontvangen en bellen of appen je binnen 24 uur. Houd je telefoon in de gaten!
       </p>
       <GoldDivider class="mx-auto my-12 max-w-xs" />
       <div class="flex flex-col items-center justify-center gap-3 sm:flex-row" data-reveal="up">
@@ -35,12 +35,37 @@ import { site } from '@/data/site';
 </BaseLayout>
 
 <script>
-  const name = new URLSearchParams(location.search).get('naam')?.slice(0, 40);
+  import { track } from '@/lib/tracking';
+  import { getVariant } from '@/lib/ab';
+
+  const params = new URLSearchParams(location.search);
+  const name = params.get('naam')?.slice(0, 40);
+  const walkAlong = params.get('type') === 'meelopen';
+
   const slot = document.querySelector('[data-name]');
   if (name && slot) slot.textContent = ` ${name}`;
+
+  if (walkAlong) {
+    document.querySelector('[data-thanks-eyebrow]')!.textContent = 'Meeloopdag aangevraagd';
+    document.querySelector('[data-thanks-text]')!.textContent =
+      'We bellen of appen je binnen 24 uur om samen een dag te plannen waarop je vrijblijvend meeloopt. Houd je telefoon in de gaten!';
+  }
+
   const wa = document.querySelector<HTMLAnchorElement>('[data-wa]');
   if (wa) {
-    const msg = `Hoi! Ik ben ${name ?? ''} en ik heb net gesolliciteerd via de website. Ik heb er zin in!`.replace('  ', ' ');
+    const who = name ? `Ik ben ${name} en ik` : 'Ik';
+    const msg = walkAlong
+      ? `Hoi! ${who} wil graag een dag meelopen. Wanneer kan dat?`
+      : `Hoi! ${who} heb net gesolliciteerd via de website. Ik heb er zin in!`;
     wa.href += `?text=${encodeURIComponent(msg)}`;
   }
+
+  // lead meten, alleen na een echte inzending (niet bij herladen of direct bezoek)
+  try {
+    const lead = sessionStorage.getItem('kp_lead');
+    if (lead) {
+      sessionStorage.removeItem('kp_lead');
+      track('lead', { type: lead, ab_variant: getVariant() });
+    }
+  } catch { /* */ }
 </script>

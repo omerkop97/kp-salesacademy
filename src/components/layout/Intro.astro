@@ -1,0 +1,35 @@
+---
+// Korte intro met het logo, alleen bij het eerste bezoek per sessie.
+// Het inline script in BaseLayout zet html.intro; animations.ts speelt hem af.
+import Logo from '@/components/ui/Logo.astro';
+import GoldDivider from '@/components/ui/GoldDivider.astro';
+---
+
+<div class="intro grain" data-intro aria-hidden="true">
+  <div class="intro__logo" data-intro-logo>
+    <Logo tone="light" size="lg" />
+  </div>
+  <div class="intro__line" data-intro-line>
+    <GoldDivider />
+  </div>
+</div>
+
+<style>
+  .intro {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    background: var(--color-navy-900);
+    /* vangnet: verdwijnt altijd, ook als JS faalt */
+    animation: intro-failsafe 0.01s linear 4s forwards;
+  }
+  :global(html.intro) .intro { display: flex; }
+  .intro__logo { font-size: 1.15rem; }
+  .intro__line { width: min(18rem, 60vw); }
+  @keyframes intro-failsafe { to { visibility: hidden; opacity: 0; } }
+</style>

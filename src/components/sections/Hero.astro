@@ -23,10 +23,10 @@ const poster = '';
         K&amp;P Sales Academy · Arnhem
       </p>
 
+      <!-- A/B-test: variant a of b (zie src/lib/ab.ts). De variant gaat mee met elke aanmelding. -->
       <h1 class="h-display text-ivory-50" data-hero-title>
-        Leer verkopen.<br />
-        Verdien goed.<br />
-        <em>Bouw aan jezelf.</em>
+        <span data-variant="a">Leer verkopen.<br />Verdien goed.<br /><em>Bouw aan jezelf.</em></span>
+        <span data-variant="b">Geen ervaring?<br />Geen probleem.<br /><em>Wij leren het je.</em></span>
       </h1>
 
       <p class="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-ivory-50/75 sm:text-xl" data-hero-in>
@@ -34,8 +34,9 @@ const poster = '';
       </p>
 
       <div class="mt-11 flex flex-col items-center justify-center gap-3 sm:flex-row" data-hero-in>
-        <Button href="/solliciteren">Solliciteer in 30 sec</Button>
-        <Button href="#aanpak" variant="ghost-light">Zo werkt het</Button>
+        <Button href="/solliciteren" data-variant="a">Solliciteer in 30 sec</Button>
+        <Button href="/solliciteren" data-variant="b">Kom kennismaken</Button>
+        <Button href="/solliciteren" variant="ghost-light" data-quiz-open>Past sales bij jou? Doe de test</Button>
       </div>
     </div>
   </div>

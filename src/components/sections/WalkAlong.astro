@@ -1,0 +1,36 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import Button from '@/components/ui/Button.astro';
+
+const points = [
+  'Helemaal vrijblijvend, je zit nergens aan vast',
+  'Je loopt mee met een ervaren collega',
+  'Je proeft de sfeer in het team',
+  'Daarna beslis je zelf of het bij je past',
+];
+---
+
+<section id="meelopen" class="bg-ivory-100 py-28 lg:py-36">
+  <div class="container-x grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-24">
+    <div>
+      <SectionHeading eyebrow="Twijfel je nog?">
+        Loop eerst<br /><em>een dag mee</em>
+        <Fragment slot="intro">
+          Zien is geloven. Kom een dag vrijblijvend meelopen en ervaar zelf hoe het is om bij K&amp;P Sales Academy te werken.
+        </Fragment>
+      </SectionHeading>
+      <div class="mt-10" data-reveal="up">
+        <Button href="/solliciteren?type=meelopen" variant="navy">Plan een meeloopdag</Button>
+      </div>
+    </div>
+
+    <ul class="border-t border-navy-800/15" data-stagger>
+      {points.map((point) => (
+        <li class="flex items-center gap-5 border-b border-navy-800/15 py-6 text-lg text-navy-800">
+          <span class="size-2 shrink-0 rotate-45 bg-gold-500" aria-hidden="true"></span>
+          {point}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

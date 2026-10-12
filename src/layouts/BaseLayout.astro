@@ -3,6 +3,10 @@ import '@/styles/global.css';
 import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
 import MobileCta from '@/components/layout/MobileCta.astro';
+import Intro from '@/components/layout/Intro.astro';
+import CookieBanner from '@/components/layout/CookieBanner.astro';
+import Quiz from '@/components/quiz/Quiz.astro';
+import { abHeadScript } from '@/lib/ab';
 import { site } from '@/data/site';
 
 interface Props {
@@ -11,6 +15,8 @@ interface Props {
   noindex?: boolean;
   headerTone?: 'light' | 'dark';
   showMobileCta?: boolean;
+  /** logo-intro bij eerste bezoek (alleen homepage; landingspagina's niet vertragen) */
+  intro?: boolean;
 }
 
 const {
@@ -19,6 +25,7 @@ const {
   noindex = false,
   headerTone = 'light',
   showMobileCta = true,
+  intro = false,
 } = Astro.props;
 
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Werken in sales, leren en doorgroeien`;
@@ -48,9 +55,22 @@ const ogImage = new URL('/og-image.jpg', site.url).href;
     <meta name="twitter:card" content="summary_large_image" />
 
     <script is:inline>document.documentElement.classList.add('js');</script>
+    <script is:inline set:html={abHeadScript} />
+    {intro && (
+      <script is:inline>
+        (function () {
+          try {
+            if (matchMedia('(prefers-reduced-motion: reduce)').matches || sessionStorage.getItem('kp_intro')) return;
+            sessionStorage.setItem('kp_intro', '1');
+            document.documentElement.classList.add('intro');
+          } catch (e) {}
+        })();
+      </script>
+    )}
     <slot name="head" />
   </head>
   <body class="min-h-dvh overflow-x-clip">
+    {intro && <Intro />}
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-gold-500 focus:px-4 focus:py-2 focus:text-navy-900">
       Direct naar inhoud
     </a>
@@ -60,6 +80,8 @@ const ogImage = new URL('/og-image.jpg', site.url).href;
     </main>
     <Footer />
     {showMobileCta && <MobileCta />}
+    <Quiz />
+    <CookieBanner />
 
     <script>
       import { initAnimations } from '@/lib/animations';

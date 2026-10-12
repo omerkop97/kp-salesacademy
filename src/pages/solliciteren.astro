@@ -40,8 +40,9 @@ const jobSchema = {
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jobSchema)} />
   <section class="grain on-dark relative min-h-svh overflow-hidden bg-navy-900 pt-32 pb-24 text-ivory-50/75 lg:pt-40">
     <div class="glow pointer-events-none absolute inset-0 -z-10" aria-hidden="true"></div>
-    <div class="container-x grid gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-24">
-      <div>
+    <!-- mobiel: kop, formulier, extra info. desktop: links kop + info, rechts formulier -->
+    <div class="container-x grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-x-24 lg:gap-y-0">
+      <div class="lg:col-start-1 lg:row-start-1">
         <p class="eyebrow mb-6 flex items-center gap-4 text-gold-300" data-reveal="fade">
           <span class="h-px w-10 bg-current"></span>Solliciteren
         </p>
@@ -49,12 +50,20 @@ const jobSchema = {
           Jouw carrière<br />begint <em>hier.</em>
         </h1>
         <p class="mt-8 max-w-md text-lg leading-relaxed" data-reveal="up">
-          Vul je gegevens in en we bellen je binnen 24 uur voor een informeel kennismakingsgesprek. Geen cv, geen ervaring nodig.
+          Alleen je naam en nummer. We bellen of appen je binnen 24 uur. Geen cv, geen ervaring nodig.
         </p>
-        <p class="mt-4 max-w-md text-sm text-ivory-50/45" data-reveal="fade">
+      </div>
+
+      <div class="relative self-start border border-ivory-50/12 bg-navy-950/40 p-6 backdrop-blur-sm sm:p-12 lg:col-start-2 lg:row-span-2 lg:row-start-1" data-reveal="up">
+        <span class="absolute -top-px left-10 h-px w-24 bg-gold-500" aria-hidden="true"></span>
+        <ApplyForm />
+      </div>
+
+      <div class="lg:col-start-1 lg:row-start-2">
+        <p class="lg:mt-4 max-w-md text-sm text-ivory-50/45" data-reveal="fade">
           Actief vanuit {city}. Werkgebied: {serviceArea.filter((c) => c !== city).join(', ')} en omgeving.
         </p>
-        <ol class="mt-12 space-y-6" data-stagger>
+        <ol class="mt-10 space-y-6" data-stagger>
           {[
             ['Laat je gegevens achter', '30 seconden, echt waar.'],
             ['We bellen je', 'Binnen 24 uur, om kennis te maken.'],
@@ -69,11 +78,6 @@ const jobSchema = {
             </li>
           ))}
         </ol>
-      </div>
-
-      <div class="relative self-start border border-ivory-50/12 bg-navy-950/40 p-7 backdrop-blur-sm sm:p-12" data-reveal="up">
-        <span class="absolute -top-px left-10 h-px w-24 bg-gold-500" aria-hidden="true"></span>
-        <ApplyForm />
       </div>
     </div>
   </section>

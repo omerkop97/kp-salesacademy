@@ -16,6 +16,78 @@ export const pillars = [
   },
 ];
 
+// Quiz "Past sales bij jou?". Elk antwoord telt op bij een profiel.
+// Er is geen fout antwoord: iedereen krijgt een positief profiel.
+export type QuizProfile = 'verbinder' | 'doorzetter' | 'energiebron' | 'denker';
+
+export const quizProfiles: Record<QuizProfile, { title: string; text: string }> = {
+  verbinder: {
+    title: 'De Verbinder',
+    text: 'Jij voelt mensen goed aan en maakt makkelijk contact. Precies wat eerlijk verkopen draait: luisteren, begrijpen en mensen echt helpen.',
+  },
+  doorzetter: {
+    title: 'De Doorzetter',
+    text: 'Een nee houdt jou niet tegen. Je wilt doelen halen en jezelf elke dag verbeteren. Met die mindset groei je hier razendsnel.',
+  },
+  energiebron: {
+    title: 'De Energiebron',
+    text: 'Jij brengt sfeer, lef en enthousiasme. Mensen worden blij van jou, en dat is in sales goud waard.',
+  },
+  denker: {
+    title: 'De Denker',
+    text: 'Jij wilt snappen hoe iets werkt en zoekt de beste aanpak. Dat maakt je sterk in het uitleggen en overtuigen met echte argumenten.',
+  },
+};
+
+export const quizQuestions: { q: string; answers: { label: string; profile?: QuizProfile; value?: string }[] }[] = [
+  {
+    q: 'Je komt op een feestje waar je bijna niemand kent. Wat doe je?',
+    answers: [
+      { label: 'Ik stel me gewoon voor aan een groepje', profile: 'verbinder' },
+      { label: 'Binnen tien minuten maak ik een grap en sta ik te lachen', profile: 'energiebron' },
+      { label: 'Ik kijk eerst even rond en kies dan wie ik aanspreek', profile: 'denker' },
+    ],
+  },
+  {
+    q: 'Iemand zegt nee tegen jouw idee. Jij denkt…',
+    answers: [
+      { label: 'Prima, volgende! Ik geef niet op', profile: 'doorzetter' },
+      { label: 'Waarom eigenlijk? Ik wil het begrijpen', profile: 'denker' },
+      { label: 'Misschien kan ik het beter uitleggen', profile: 'verbinder' },
+    ],
+  },
+  {
+    q: 'Wat motiveert jou het meest?',
+    answers: [
+      { label: 'Goed verdienen en doelen halen', profile: 'doorzetter' },
+      { label: 'Samen met een team winnen', profile: 'energiebron' },
+      { label: 'Mezelf ontwikkelen en nieuwe dingen leren', profile: 'denker' },
+      { label: 'Andere mensen echt verder helpen', profile: 'verbinder' },
+    ],
+  },
+  {
+    q: 'Hoe omschrijven je vrienden jou?',
+    answers: [
+      { label: 'Sociaal en spontaan', profile: 'energiebron' },
+      { label: 'Een goede luisteraar', profile: 'verbinder' },
+      { label: 'Gedreven, geeft niet snel op', profile: 'doorzetter' },
+      { label: 'Slim en nieuwsgierig', profile: 'denker' },
+    ],
+  },
+  {
+    q: 'Wanneer zou je willen beginnen?',
+    answers: [
+      { label: 'Zo snel mogelijk', value: 'Zo snel mogelijk' },
+      { label: 'Binnen een maand', value: 'Binnen een maand' },
+      { label: 'Ik wil eerst even kijken', value: 'Eerst kijken' },
+    ],
+  },
+];
+
+// Korte verticale video's (9:16) voor de sectie "Volg ons". Bestanden in public/video/.
+// Voorbeeld: { src: '/video/dagstart.mp4', poster: '/video/dagstart.jpg', caption: 'Dagstart in Arnhem' }
+export const socialVideos: { src: string; poster?: string; caption?: string }[] = [];
+
 export const honestSales = [
   {
     title: 'Geen druk, wel een goed gesprek',
@@ -128,6 +200,6 @@ export const faq = [
   },
   {
     q: 'Hoe verloopt het solliciteren?',
-    a: 'Laat je gegevens achter of stuur ons een WhatsApp. We nemen binnen 24 uur contact op voor een kort, informeel kennismakingsgesprek.',
+    a: 'Laat alleen je naam en telefoonnummer achter, of stuur ons een WhatsApp. We bellen of appen je binnen 24 uur voor een kort, informeel kennismakingsgesprek. Twijfel je nog? Kom dan eerst een dag vrijblijvend meelopen.',
   },
 ];

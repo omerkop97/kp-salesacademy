@@ -1,6 +1,6 @@
 ---
 import Logo from '@/components/ui/Logo.astro';
-import { site, whatsappLink, locations, serviceArea } from '@/data/site';
+import { site, whatsappLink, locations, serviceArea, trackingEnabled } from '@/data/site';
 const wa = whatsappLink();
 const year = new Date().getFullYear();
 ---
@@ -43,7 +43,10 @@ const year = new Date().getFullYear();
 
     <div class="flex flex-col gap-4 pt-4 text-sm sm:flex-row sm:items-center sm:justify-between">
       <p>© {year} {site.name}. Onderdeel van {site.parent}.</p>
-      <a class="hover:text-ivory-50" href="/privacy">Privacyverklaring</a>
+      <div class="flex gap-6">
+        {trackingEnabled && <a class="hover:text-ivory-50" href="/privacy#cookies" data-cookie-settings>Cookie-instellingen</a>}
+        <a class="hover:text-ivory-50" href="/privacy">Privacyverklaring</a>
+      </div>
     </div>
   </div>
 </footer>

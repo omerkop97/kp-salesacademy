@@ -4,10 +4,13 @@ import Hero from '@/components/sections/Hero.astro';
 import Highlights from '@/components/sections/Highlights.astro';
 import Pillars from '@/components/sections/Pillars.astro';
 import HonestSales from '@/components/sections/HonestSales.astro';
+import QuizTeaser from '@/components/sections/QuizTeaser.astro';
 import Steps from '@/components/sections/Steps.astro';
 import CareerPath from '@/components/sections/CareerPath.astro';
 import DayInLife from '@/components/sections/DayInLife.astro';
+import WalkAlong from '@/components/sections/WalkAlong.astro';
 import Stories from '@/components/sections/Stories.astro';
+import SocialVideos from '@/components/sections/SocialVideos.astro';
 import Faq from '@/components/sections/Faq.astro';
 import ApplySection from '@/components/sections/ApplySection.astro';
 import { site, locations, serviceArea } from '@/data/site';
@@ -32,16 +35,19 @@ const orgSchema = {
 };
 ---
 
-<BaseLayout title="Werken in sales in Arnhem en omgeving">
+<BaseLayout title="Werken in sales in Arnhem en omgeving" intro>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
   <Hero />
   <Highlights />
   <Pillars />
   <HonestSales />
+  <QuizTeaser />
   <Steps />
   <CareerPath />
   <DayInLife />
+  <WalkAlong />
   <Stories />
+  <SocialVideos />
   <Faq />
   <ApplySection />
 </BaseLayout>

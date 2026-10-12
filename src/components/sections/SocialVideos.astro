@@ -1,0 +1,61 @@
+---
+// Korte verticale video's van het team (TikTok/Reels).
+// Zet .mp4-bestanden in public/video/ en voeg ze toe aan socialVideos in content.ts.
+// Zonder video's wordt deze sectie niet getoond.
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { socialVideos } from '@/data/content';
+import { site } from '@/data/site';
+---
+
+{socialVideos.length > 0 && (
+  <section class="overflow-hidden bg-ivory-50 py-28 lg:py-36">
+    <div class="container-x">
+      <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHeading eyebrow="Volg ons">
+          Werken met het<br /><em>leukste team</em>
+        </SectionHeading>
+        <div class="flex gap-6" data-reveal="fade">
+          {site.socials.instagram && <a href={site.socials.instagram} target="_blank" rel="noopener" class="eyebrow text-navy-800 underline decoration-gold-500 underline-offset-8">Instagram</a>}
+          {site.socials.tiktok && <a href={site.socials.tiktok} target="_blank" rel="noopener" class="eyebrow text-navy-800 underline decoration-gold-500 underline-offset-8">TikTok</a>}
+        </div>
+      </div>
+    </div>
+
+    <div class="videos-track mt-14 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4" data-stagger>
+      {socialVideos.map((v) => (
+        <figure class="relative aspect-[9/16] w-[62vw] max-w-[17rem] shrink-0 snap-start overflow-hidden bg-navy-900">
+          <video class="size-full object-cover" src={v.src} poster={v.poster} muted loop playsinline preload="none" data-autoplay></video>
+          {v.caption && (
+            <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950/90 to-transparent p-4 pt-12 text-sm text-ivory-50">
+              {v.caption}
+            </figcaption>
+          )}
+        </figure>
+      ))}
+    </div>
+  </section>
+)}
+
+<script>
+  // video's alleen afspelen als ze in beeld zijn (scheelt data en batterij)
+  const videos = document.querySelectorAll<HTMLVideoElement>('video[data-autoplay]');
+  if (videos.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      });
+    }, { threshold: 0.4 });
+    videos.forEach((v) => io.observe(v));
+  }
+</script>
+
+<style>
+  .videos-track {
+    scrollbar-width: none;
+    padding-inline: max(1.25rem, calc((100vw - 80rem) / 2 + 3rem));
+    scroll-padding-inline: max(1.25rem, calc((100vw - 80rem) / 2 + 3rem));
+  }
+  .videos-track::-webkit-scrollbar { display: none; }
+</style>

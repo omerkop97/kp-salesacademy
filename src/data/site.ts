@@ -15,7 +15,17 @@ export const site = {
     instagram: '', // TODO
     tiktok: '', // TODO
   },
+  // Tracking-ID's. Leeg = niet geladen. Zodra er één is ingevuld verschijnt
+  // automatisch de cookiebanner; scripts laden pas na toestemming.
+  tracking: {
+    ga4: '', // Google Analytics 4, bijv. 'G-XXXXXXX'
+    metaPixel: '', // Meta (Instagram/Facebook) Pixel-ID, bijv. '1234567890'
+    tiktokPixel: '', // TikTok Pixel-ID
+    snapPixel: '', // Snapchat Pixel-ID
+  },
 };
+
+export const trackingEnabled = Object.values(site.tracking).some(Boolean);
 
 export type Location = {
   slug: string;

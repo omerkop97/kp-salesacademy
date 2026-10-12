@@ -6,11 +6,10 @@ interface Props {
 }
 const { tone = 'dark' } = Astro.props;
 const activeLocations = locations.filter((l) => l.active);
-
-const sources = ['Instagram', 'TikTok', 'Snapchat', 'Via een vriend(in)', 'Google', 'Anders'];
 ---
 
-<!-- Netlify Forms: inzendingen komen binnen in Netlify en worden doorgemaild (Forms > Notifications) -->
+<!-- Netlify Forms: inzendingen komen binnen in Netlify en worden doorgemaild (Forms > Notifications).
+     Alle velden moeten hier in de HTML staan, anders slaat Netlify ze niet op. -->
 <form
   class:list={['apply-form', `apply-form--${tone}`]}
   name="sollicitatie"
@@ -27,25 +26,33 @@ const sources = ['Instagram', 'TikTok', 'Snapchat', 'Via een vriend(in)', 'Googl
   <input type="hidden" name="utm_campaign" />
   <input type="hidden" name="pagina" />
   <input type="hidden" name="referrer" />
+  <input type="hidden" name="ab_variant" />
+  <input type="hidden" name="quiz_profiel" />
+  <input type="hidden" name="startmoment" />
+  {activeLocations.length === 1 && <input type="hidden" name="vestiging" value={activeLocations[0].slug} />}
+
+  <fieldset class="choice mb-8">
+    <legend class="field__label mb-3">Wat wil je?</legend>
+    <div class="grid grid-cols-2 gap-2">
+      <label class="choice__option">
+        <input type="radio" name="keuze" value="Solliciteren" checked />
+        <span>Solliciteren</span>
+      </label>
+      <label class="choice__option">
+        <input type="radio" name="keuze" value="Dag meelopen" />
+        <span>Eerst een dag meelopen</span>
+      </label>
+    </div>
+  </fieldset>
+
   <div class="grid gap-x-6 gap-y-7 sm:grid-cols-2">
-    <label class="field sm:col-span-2">
+    <label class="field">
       <span class="field__label">Naam</span>
-      <input name="naam" type="text" autocomplete="name" required maxlength="100" placeholder="Je voor- en achternaam" />
+      <input name="naam" type="text" autocomplete="name" required minlength="2" maxlength="100" placeholder="Je naam" />
     </label>
     <label class="field">
       <span class="field__label">Telefoonnummer</span>
-      <input name="telefoon" type="tel" autocomplete="tel" required maxlength="20" placeholder="06 12345678" />
-    </label>
-    <label class="field">
-      <span class="field__label">E-mailadres</span>
-      <input name="email" type="email" autocomplete="email" required maxlength="150" placeholder="jij@email.nl" />
-    </label>
-    <label class="field sm:col-span-2">
-      <span class="field__label">Hoe ken je ons?</span>
-      <select name="hoe_ken_je_ons" required>
-        <option value="" disabled selected>Kies een optie</option>
-        {sources.map((s) => <option value={s}>{s}</option>)}
-      </select>
+      <input name="telefoon" type="tel" inputmode="tel" autocomplete="tel" required pattern="[0-9 +\(\)\-]{10,20}" maxlength="20" placeholder="06 12345678" />
     </label>
     {activeLocations.length > 1 && (
       <label class="field sm:col-span-2">
@@ -55,7 +62,6 @@ const sources = ['Instagram', 'TikTok', 'Snapchat', 'Via een vriend(in)', 'Googl
         </select>
       </label>
     )}
-    {activeLocations.length === 1 && <input type="hidden" name="vestiging" value={activeLocations[0].slug} />}
 
     <!-- honeypot tegen spam-bots -->
     <label class="hidden" aria-hidden="true">Laat leeg <input name="bedrijf" tabindex="-1" autocomplete="off" /></label>
@@ -63,30 +69,42 @@ const sources = ['Instagram', 'TikTok', 'Snapchat', 'Via een vriend(in)', 'Googl
     <label class="consent sm:col-span-2">
       <input type="checkbox" name="toestemming" value="ja" required />
       <span>
-        Ik ga akkoord dat K&amp;P Sales Academy mijn gegevens gebruikt om contact met mij op te nemen over mijn sollicitatie.
+        Ik ga akkoord dat K&amp;P Sales Academy mij belt of appt over mijn aanmelding.
         <a href="/privacy" target="_blank" class="underline underline-offset-2">Privacyverklaring</a>
       </span>
     </label>
   </div>
-
-  <p class="form-error mt-6 hidden text-sm" role="alert" data-form-error></p>
+<p class="form-error mt-6 hidden text-sm" role="alert" data-form-error></p>
 
   <button type="submit" class="submit mt-8 flex w-full items-center justify-center gap-3" data-submit>
-    <span data-submit-label>Verstuur mijn gegevens</span>
+    <span data-submit-label>Verstuur</span>
     <svg viewBox="0 0 20 20" fill="none" class="size-5" aria-hidden="true"><path d="M4 10h12m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
-  <p class="form-note mt-4 text-center text-sm">We nemen binnen 24 uur contact met je op.</p>
+  <p class="form-note mt-4 text-center text-sm">We bellen of appen je binnen 24 uur. Vrijblijvend.</p>
 </form>
 
 <script>
+  import { getVariant } from '@/lib/ab';
+
   document.querySelectorAll<HTMLFormElement>('[data-apply-form]').forEach((form) => {
     const errorEl = form.querySelector<HTMLElement>('[data-form-error]')!;
     const button = form.querySelector<HTMLButtonElement>('[data-submit]')!;
     const label = form.querySelector<HTMLElement>('[data-submit-label]')!;
+    const params = new URLSearchParams(location.search);
+
+    // ?type=meelopen kiest direct "Eerst een dag meelopen"
+    if (params.get('type') === 'meelopen') {
+      form.querySelector<HTMLInputElement>('input[name="keuze"][value="Dag meelopen"]')!.checked = true;
+    }
 
     const showError = (msg: string) => {
       errorEl.textContent = msg;
       errorEl.classList.remove('hidden');
+    };
+
+    const setHidden = (name: string, value: string | null) => {
+      const input = form.elements.namedItem(name) as HTMLInputElement | null;
+      if (input && !(input instanceof RadioNodeList)) input.value = value ?? '';
     };
 
     form.addEventListener('submit', async (e) => {
@@ -95,24 +113,20 @@ const sources = ['Instagram', 'TikTok', 'Snapchat', 'Via een vriend(in)', 'Googl
 
       if (!form.checkValidity()) {
         form.classList.add('was-validated');
-        const firstInvalid = form.querySelector<HTMLElement>(':invalid');
-        firstInvalid?.focus();
-        showError('Vul alle velden in en geef toestemming om contact met je op te nemen.');
+        form.querySelector<HTMLElement>(':invalid')?.focus();
+        showError('Vul je naam en een geldig telefoonnummer in, en geef toestemming om contact met je op te nemen.');
         return;
       }
 
-      // herkomst meesturen, zodat je ziet welke advertentie werkt
-      const params = new URLSearchParams(location.search);
-      const setHidden = (name: string, value: string | null) => {
-        const input = form.elements.namedItem(name) as HTMLInputElement | null;
-        if (input) input.value = value ?? '';
-      };
+      // herkomst en test-variant meesturen, zodat je ziet wat werkt
       ['utm_source', 'utm_medium', 'utm_campaign'].forEach((key) => setHidden(key, params.get(key)));
       setHidden('pagina', location.pathname);
       setHidden('referrer', document.referrer);
+      setHidden('ab_variant', getVariant());
 
       const formData = new FormData(form);
       const first = String(formData.get('naam')).trim().split(' ')[0];
+      const type = formData.get('keuze') === 'Dag meelopen' ? 'meelopen' : 'solliciteren';
 
       button.disabled = true;
       label.textContent = 'Bezig met versturen…';
@@ -128,11 +142,13 @@ const sources = ['Instagram', 'TikTok', 'Snapchat', 'Via een vriend(in)', 'Googl
           });
           if (!res.ok) throw new Error('Er ging iets mis.');
         }
-        location.href = `/bedankt?naam=${encodeURIComponent(first)}`;
+        // de bedankpagina meet de lead (alleen na een echte inzending)
+        try { sessionStorage.setItem('kp_lead', type); } catch { /* */ }
+        location.href = `/bedankt?naam=${encodeURIComponent(first)}&type=${type}`;
       } catch (err) {
         showError(`${(err as Error).message} Probeer het opnieuw of stuur ons een WhatsApp.`);
         button.disabled = false;
-        label.textContent = 'Verstuur mijn gegevens';
+        label.textContent = 'Verstuur';
       }
     });
   });
@@ -185,8 +201,31 @@ const sources = ['Instagram', 'TikTok', 'Snapchat', 'Via een vriend(in)', 'Googl
   .field select:focus { border-color: var(--color-gold-500); }
   .was-validated .field :invalid { border-color: #e2725b; }
 
-  .consent {
+  .choice { border: 0; padding: 0; margin-inline: 0; }
+  .choice__option { position: relative; cursor: pointer; }
+  .choice__option input { position: absolute; opacity: 0; pointer-events: none; }
+  .choice__option span {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.25rem;
+    padding: 0.6rem 0.75rem;
+    text-align: center;
+    font-size: 0.9rem;
+    line-height: 1.25;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    transition: border-color 0.3s, color 0.3s, background-color 0.3s;
+  }
+  .choice__option:hover span { border-color: var(--color-gold-500); }
+  .choice__option input:checked + span {
+    border-color: var(--color-gold-500);
+    background: color-mix(in srgb, var(--color-gold-500) 14%, transparent);
+    color: var(--fg);
+  }
+  .choice__option input:focus-visible + span { outline: 2px solid var(--color-gold-500); outline-offset: 2px; }
+
+  .consent {    display: flex;
     gap: 0.85rem;
     align-items: flex-start;
     font-size: 0.875rem;

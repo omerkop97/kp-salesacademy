@@ -1,11 +1,12 @@
 ---
 interface Props {
   href: string;
+  [key: `data-${string}`]: string | boolean | undefined;
   variant?: 'gold' | 'navy' | 'ghost-light' | 'ghost-dark';
   class?: string;
   target?: string;
 }
-const { href, variant = 'gold', class: className = '', target } = Astro.props;
+const { href, variant = 'gold', class: className = '', target, ...rest } = Astro.props;
 const external = target === '_blank';
 ---
 
@@ -14,6 +15,8 @@ const external = target === '_blank';
   target={target}
   rel={external ? 'noopener' : undefined}
   class:list={['btn', `btn--${variant}`, className]}
+  data-magnetic
+  {...rest}
 >
   <span class="btn__label"><slot /></span>
   <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">

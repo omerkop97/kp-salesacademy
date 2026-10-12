@@ -34,3 +34,20 @@ Mail ontvangen: Netlify > Site > **Forms > Form notifications > Add notification
 Lokaal (`npm run dev`) wordt een inzending alleen in de browserconsole gelogd.
 
 WhatsApp-nummer staat in `src/data/site.ts` (`whatsapp`).
+## Quiz, meelopen & formulier
+
+- Quiz "Past sales bij jou?": vragen en profielen in `quizQuestions` / `quizProfiles` (`src/data/content.ts`). Elke knop met `data-quiz-open` opent de quiz.
+- Formulier vraagt alleen naam + telefoon + keuze (Solliciteren / Dag meelopen). In de Netlify-mail zie je ook `quiz_profiel`, `startmoment`, `ab_variant` en UTM-gegevens.
+- `/solliciteren?type=meelopen` kiest automatisch "Eerst een dag meelopen".
+
+## Tracking & cookies
+
+Vul de ID's in bij `tracking` in `src/data/site.ts` (GA4, Meta Pixel, TikTok Pixel, Snapchat Pixel). Zodra er één is ingevuld verschijnt de cookiebanner; scripts laden pas na "Accepteren". Gemeten events: `quiz_start`, `quiz_complete`, `lead` (Meta: Lead, TikTok: SubmitForm, Snap: SIGN_UP).
+
+## A/B-test hero
+
+Bezoekers krijgen willekeurig variant `a` of `b` van de hero-kop en hoofdknop (`data-variant` in `Hero.astro`). De variant staat in elke aanmelding (`ab_variant`). Tel na een paar weken in Netlify Forms welke variant meer aanmeldingen oplevert, en verwijder dan de verliezer.
+
+## Social video's
+
+Zet verticale `.mp4`-video's in `public/video/` en voeg ze toe aan `socialVideos` in `src/data/content.ts`. Zonder video's is de sectie onzichtbaar. Een hero-video zet je in `Hero.astro` (`video`).

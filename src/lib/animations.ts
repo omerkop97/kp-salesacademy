@@ -2,6 +2,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
+import { applyVariant } from './ab';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -27,8 +28,43 @@ function initLenis() {
   return lenis;
 }
 
-/** Koppen regel voor regel "omhoog" laten komen, zoals op sales-club.nl */
-function splitHeadings() {
+/** Intro met logo (alleen bij html.intro, eerste bezoek per sessie) */
+function intro(): Promise<void> {
+  const el = document.querySelector<HTMLElement>('[data-intro]');
+  if (!el || !document.documentElement.classList.contains('intro')) return Promise.resolve();
+  return new Promise((resolve) => {
+    const tl = gsap.timeline({
+      defaults: { ease: 'expo.out' },
+      onComplete: () => {
+        document.documentElement.classList.remove('intro');
+        resolve();
+      },
+    });
+    tl.from(el.querySelector('[data-intro-logo] .logo__mark'), { opacity: 0, scale: 0.92, duration: 1 })
+      .from(el.querySelector('[data-intro-logo] .logo__tagline'), { opacity: 0, letterSpacing: '0.1em', duration: 1.1 }, 0.25)
+      .from(el.querySelectorAll('[data-divider-line]'), { scaleX: 0, duration: 1 }, 0.4)
+      .to(el, { yPercent: -100, duration: 0.9, ease: 'expo.inOut' }, 1.5)
+      // hero alvast laten starten terwijl het doek omhoog gaat
+      .add(resolve, 1.75);
+  });
+}
+
+/** Knoppen bewegen subtiel mee met de muis (alleen met een echte muis) */
+function magnetic() {
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => {
+    const x = gsap.quickTo(el, 'x', { duration: 0.6, ease: 'power3.out' });
+    const y = gsap.quickTo(el, 'y', { duration: 0.6, ease: 'power3.out' });
+    el.addEventListener('pointermove', (e) => {
+      const r = el.getBoundingClientRect();
+      x((e.clientX - (r.left + r.width / 2)) * 0.25);
+      y((e.clientY - (r.top + r.height / 2)) * 0.35);
+    });
+    el.addEventListener('pointerleave', () => { x(0); y(0); });
+  });
+}
+
+/** Koppen regel voor regel "omhoog" laten komen, zoals op sales-club.nl */function splitHeadings() {
   document.querySelectorAll<HTMLElement>('[data-split]').forEach((el) => {
     // autoSplit: opnieuw splitsen als de breedte verandert (draaien telefoon, resize)
     SplitText.create(el, {
@@ -205,10 +241,13 @@ function showAll() {
 }
 
 export async function initAnimations() {
+  applyVariant();
   if (reduced) return showAll();
   initLenis();
+  magnetic();
   // eerst fonts laden, anders klopt de regelafbreking van SplitText niet
   await document.fonts?.ready;
+  await intro();
   hero();
   splitHeadings();
   reveals();
