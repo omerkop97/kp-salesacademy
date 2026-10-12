@@ -31,19 +31,6 @@ const activeLocations = locations.filter((l) => l.active);
   <input type="hidden" name="startmoment" />
   {activeLocations.length === 1 && <input type="hidden" name="vestiging" value={activeLocations[0].slug} />}
 
-  <fieldset class="choice mb-8">
-    <legend class="field__label mb-3">Wat wil je?</legend>
-    <div class="grid grid-cols-2 gap-2">
-      <label class="choice__option">
-        <input type="radio" name="keuze" value="Solliciteren" checked />
-        <span>Solliciteren</span>
-      </label>
-      <label class="choice__option">
-        <input type="radio" name="keuze" value="Dag meelopen" />
-        <span>Eerst een dag meelopen</span>
-      </label>
-    </div>
-  </fieldset>
 
   <div class="grid gap-x-6 gap-y-7 sm:grid-cols-2">
     <label class="field">
@@ -77,10 +64,10 @@ const activeLocations = locations.filter((l) => l.active);
 <p class="form-error mt-6 hidden text-sm" role="alert" data-form-error></p>
 
   <button type="submit" class="submit mt-8 flex w-full items-center justify-center gap-3" data-submit>
-    <span data-submit-label>Verstuur</span>
+    <span data-submit-label>Plan mijn meeloopdag</span>
     <svg viewBox="0 0 20 20" fill="none" class="size-5" aria-hidden="true"><path d="M4 10h12m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
-  <p class="form-note mt-4 text-center text-sm">We bellen of appen je binnen 24 uur. Vrijblijvend.</p>
+  <p class="form-note mt-4 text-center text-sm">We bellen of appen je binnen 24 uur om je meeloopdag te plannen.</p>
 </form>
 
 <script>
@@ -92,10 +79,6 @@ const activeLocations = locations.filter((l) => l.active);
     const label = form.querySelector<HTMLElement>('[data-submit-label]')!;
     const params = new URLSearchParams(location.search);
 
-    // ?type=meelopen kiest direct "Eerst een dag meelopen"
-    if (params.get('type') === 'meelopen') {
-      form.querySelector<HTMLInputElement>('input[name="keuze"][value="Dag meelopen"]')!.checked = true;
-    }
 
     const showError = (msg: string) => {
       errorEl.textContent = msg;
@@ -126,7 +109,6 @@ const activeLocations = locations.filter((l) => l.active);
 
       const formData = new FormData(form);
       const first = String(formData.get('naam')).trim().split(' ')[0];
-      const type = formData.get('keuze') === 'Dag meelopen' ? 'meelopen' : 'solliciteren';
 
       button.disabled = true;
       label.textContent = 'Bezig met versturen…';
@@ -143,12 +125,12 @@ const activeLocations = locations.filter((l) => l.active);
           if (!res.ok) throw new Error('Er ging iets mis.');
         }
         // de bedankpagina meet de lead (alleen na een echte inzending)
-        try { sessionStorage.setItem('kp_lead', type); } catch { /* */ }
-        location.href = `/bedankt?naam=${encodeURIComponent(first)}&type=${type}`;
+        try { sessionStorage.setItem('kp_lead', 'meeloopdag'); } catch { /* */ }
+        location.href = `/bedankt?naam=${encodeURIComponent(first)}`;
       } catch (err) {
         showError(`${(err as Error).message} Probeer het opnieuw of stuur ons een WhatsApp.`);
         button.disabled = false;
-        label.textContent = 'Verstuur';
+        label.textContent = 'Plan mijn meeloopdag';
       }
     });
   });
@@ -200,30 +182,6 @@ const activeLocations = locations.filter((l) => l.active);
   .field input:focus,
   .field select:focus { border-color: var(--color-gold-500); }
   .was-validated .field :invalid { border-color: #e2725b; }
-
-  .choice { border: 0; padding: 0; margin-inline: 0; }
-  .choice__option { position: relative; cursor: pointer; }
-  .choice__option input { position: absolute; opacity: 0; pointer-events: none; }
-  .choice__option span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 3.25rem;
-    padding: 0.6rem 0.75rem;
-    text-align: center;
-    font-size: 0.9rem;
-    line-height: 1.25;
-    border: 1px solid var(--line);
-    color: var(--muted);
-    transition: border-color 0.3s, color 0.3s, background-color 0.3s;
-  }
-  .choice__option:hover span { border-color: var(--color-gold-500); }
-  .choice__option input:checked + span {
-    border-color: var(--color-gold-500);
-    background: color-mix(in srgb, var(--color-gold-500) 14%, transparent);
-    color: var(--fg);
-  }
-  .choice__option input:focus-visible + span { outline: 2px solid var(--color-gold-500); outline-offset: 2px; }
 
   .consent {    display: flex;
     gap: 0.85rem;

@@ -44,7 +44,7 @@ import { quizQuestions, quizProfiles } from '@/data/content';
         <p class="eyebrow text-gold-300">Jouw uitslag</p>
         <h2 class="quiz__q mt-3">Jij bent <em data-quiz-profile-title></em></h2>
         <p class="mt-4 max-w-lg text-lg leading-relaxed text-ivory-50/75" data-quiz-profile-text></p>
-        <p class="mt-4 text-ivory-50">Sales past bij jou. Zullen we kennismaken?</p>
+        <p class="mt-4 text-ivory-50">Sales past bij jou. Kom een dag vrijblijvend meelopen?</p>
         <div class="mt-8 border border-ivory-50/12 bg-navy-950/40 p-6 sm:p-8">
           <ApplyForm />
         </div>
@@ -137,9 +137,6 @@ import { quizQuestions, quizProfiles } from '@/data/content';
           result.querySelector('[data-quiz-profile-text]')!.textContent = p.text;
           (form.elements.namedItem('quiz_profiel') as HTMLInputElement).value = p.title;
           (form.elements.namedItem('startmoment') as HTMLInputElement).value = start;
-          if (start === 'Eerst kijken') {
-            form.querySelector<HTMLInputElement>('input[name="keuze"][value="Dag meelopen"]')!.checked = true;
-          }
           count.textContent = String(steps.length);
           show(result, current);
           track('quiz_complete', { profiel: p.title });

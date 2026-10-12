@@ -37,8 +37,7 @@ WhatsApp-nummer staat in `src/data/site.ts` (`whatsapp`).
 ## Quiz, meelopen & formulier
 
 - Quiz "Past sales bij jou?": vragen en profielen in `quizQuestions` / `quizProfiles` (`src/data/content.ts`). Elke knop met `data-quiz-open` opent de quiz.
-- Formulier vraagt alleen naam + telefoon + keuze (Solliciteren / Dag meelopen). In de Netlify-mail zie je ook `quiz_profiel`, `startmoment`, `ab_variant` en UTM-gegevens.
-- `/solliciteren?type=meelopen` kiest automatisch "Eerst een dag meelopen".
+- Iedereen begint met een meeloopdag: het formulier vraagt alleen naam + telefoon. In de Netlify-mail zie je ook `quiz_profiel`, `startmoment`, `ab_variant` en UTM-gegevens.
 
 ## Tracking & cookies
 

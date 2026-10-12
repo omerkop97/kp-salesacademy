@@ -109,8 +109,8 @@ export const honestSales = [
 
 export const steps = [
   {
-    title: 'Kennismaken',
-    text: 'Een kort, informeel gesprek. Geen sollicitatiestress: we willen vooral weten wie je bent en wat jij wilt bereiken.',
+    title: 'Meeloopdag',
+    text: 'Je loopt een dag vrijblijvend mee met het team. Zo zie je precies hoe het werkt, en leren wij jou kennen. Daarna beslis je zelf.',
   },
   {
     title: 'Training',
@@ -188,7 +188,7 @@ export const faq = [
   },
   {
     q: 'Hoeveel kan ik verdienen?',
-    a: 'Je inkomen bepaal je voor een groot deel zelf. Je verdient per verkoop, dus hoe beter je wordt, hoe meer je verdient. In het kennismakingsgesprek leggen we de beloning precies en eerlijk uit.',
+    a: 'Je inkomen bepaal je voor een groot deel zelf. Je verdient per verkoop, dus hoe beter je wordt, hoe meer je verdient. Tijdens je meeloopdag leggen we de beloning precies en eerlijk uit.',
   },
   {
     q: 'Krijg ik training en coaching?',
@@ -200,6 +200,6 @@ export const faq = [
   },
   {
     q: 'Hoe verloopt het solliciteren?',
-    a: 'Laat alleen je naam en telefoonnummer achter, of stuur ons een WhatsApp. We bellen of appen je binnen 24 uur voor een kort, informeel kennismakingsgesprek. Twijfel je nog? Kom dan eerst een dag vrijblijvend meelopen.',
+    a: 'Laat alleen je naam en telefoonnummer achter, of stuur ons een WhatsApp. Binnen 24 uur bellen of appen we je om een meeloopdag te plannen. Je loopt een dag vrijblijvend mee en daarna beslis je zelf of het bij je past.',
   },
 ];
